@@ -1,5 +1,6 @@
 # closedPoly
-closed Polygonal coo calcul theodolite
+closed Polygonal 
+calcul coo from survey (theodolite) 
 
 https://fredgaloppin.github.io/closedPoly/. 
 
