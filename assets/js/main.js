@@ -1,83 +1,131 @@
 // à integrer: 
 //			correction sphericite terre eventuel; 
-//			grade de 0 à 400;
+//			
 //			alert? ecarts trop important  + tout calcul ecart typ appareil				
 
-// ];
-
-//   document.getElementById("calc").addEventListener("click", calc);
-//   function validerangle(obj, seuilMin, seuilMax) {
-// 	if ((obj.value < seuilMin) || (obj.value > seuilMax))
-// 	  alert("Valeur invalide !");
-//   }
-  
 // ------------function menu de boutons------------------------------------
-
 function openNav() {
-	document.getElementById("mySidepanel").style.width = "100px";
-  }
-  
+	document.getElementById("mySidepanel").style.width = "90px";
+}
+
 function closeNav() {
 	document.getElementById("mySidepanel").style.width = "0";
-  }
-// ---- arrays & variables----decla-----
-let poly = [];        // decla array holding stations
-// ------ array data,  stations bonded//
-	let dishorArr = [];
-	let dishorAva = [];
-	let dishorEcar = [];
-	let dishorMoy = [];
-	let proportion = [];
-	let compAng = [];
-	let angleIntC = [];
-	let gis = []; 
-	let deltaX = [];
-	let deltaY = [];
-	let cooProvX = [];
-	let cooProvY = [];
-	let deltaCompX = [];
-	let deltaCompY = [];
-	let cooX = [];
-	let cooY = [];
-	let zAr = [];
-	let zAv = [];
-	let zecart = [];
-	let zdelta = [];
-	let zProv = [];
-	let zdeltaComp = [];
-	let cooZ = [];
-// -----var decla-----
-let horD1 = 0;
-let horR1 = 0;
-let verD1 = 0;
-let verR1 = 0;
-let distoD1 = 0;
-let distoR1 = 0;
-let horD2 = 0;
-let horG2 = 0;
-let verD2 = 0;
-let verG2 = 0;
-let distoD2 = 0;
-let distoR2 = 0;
-let hautid = 0;
-let htA = 0;
-let htB = 0;
-let stationNum = -1;
-let mah = 0;
-let mbh = 0;
-let eah = 0;
-let ebh = 0;
-let mav = 0;
-let mbv = 0;
-let eav = 0;
-let ebv = 0;
-let ead = 0;
-let ebd = 0;
-let mad = 0;
-let mbd = 0;
-let smr = 0;
+}
+function openOnDemand(){
+	pop.hidden = false;
+}
+function closeOnDemand(){
+	pop.hidden = true;
+}
+//-------- modal script---------//
+           // Get the modal
+           let modal = document.getElementById("modal");
+           // Get the <span> element that closes the modal
+           let span = document.getElementsByClassName("close")[0];
+           // When the user clicks the button, open the modal 
+           function displayResult() {
+             modal.style.display = "block";
+           }
+           // When the user clicks on <span> (x), close the modal
+           span.onclick = function() {
+             modal.style.display = "none";
+			emptyContent();
+           }
+           // When the user clicks anywhere outside of the modal, close it
+           window.onclick = function(event) {
+             if (event.target == modal) {
+               modal.style.display = "none";
+			   emptyContent();
+             }
+           }
+        function emptyContent() {
+			let content = document.getElementById("displayCoo");
+				 while (content.hasChildNodes()) {
+					 content.removeChild(content.firstChild);
+					}
+		}
+//-arrays & variables    decla 
+	let poly = [];        // decla array holding stations
+	// ------ array -- data,  stations bonded//
+		let pop = document.getElementById('onDemand');
+		let displayNumber = document.getElementById('number');
+		let standardDevAng = 0.01;
+		let zInitial = 400;
+		let xInitial = 500;
+		let yInitial = 500;
+		let bearing = 100; // North celestial pole
+		let dishorArr = [];
+		let dishorAva = [];
+		let dishorEcar = [];
+		let dishorMoy = [];
+		let proportion = [];
+		let compAng = [];
+		let angleIntC = [];
+		let gis = []; 
+		let deltaX = [];
+		let deltaY = [];
+		let cooProvX = [];
+		let cooProvY = [];
+		let deltaCompX = [];
+		let deltaCompY = [];
+		let cooX = [];
+		let cooY = [];
+		let zAr = [];
+		let zAv = [];
+		let zecart = [];
+		let zdelta = [];
+		let zProv = [];
+		let zdeltaComp = [];
+		let cooZ = [];
+	// -----var decla-----
+		let horD1 = 0;
+		let horR1 = 0;
+		let verD1 = 0;
+		let verR1 = 0;
+		let distoD1 = 0;
+		let distoR1 = 0;
+		let horD2 = 0;
+		let horG2 = 0;
+		let verD2 = 0;
+		let verG2 = 0;
+		let distoD2 = 0;
+		let distoR2 = 0;
+		let hautid = 0;
+		let htA = 0;
+		let htB = 0;
+		let stationNum = -1;
+		let mah = 0;
+		let mbh = 0;
+		let eah = 0;
+		let ebh = 0;
+		let mav = 0;
+		let mbv = 0;
+		let eav = 0;
+		let ebv = 0;
+		let ead = 0;
+		let ebd = 0;
+		let mad = 0;
+		let mbd = 0;
+		let smr = 0;
 // end decla
+displayNumber.innerHTML = "Station n°"+((poly.length) + 1);
+function displayNumber() {
+	
+}
+document.getElementById("displayStations").addEventListener("click", displayStlist);
+function displayStlist() {
+	if (poly.length == 0) {
+		alert("no stations recorded yet");
+	} else {
+		let choiceList = document.createElement("LI");
+		var textnode = document.createTextNode("Water");         
+		choiceList.appendChild(textnode);
+		displayNumber.appendChild(choiceList);
+
+	}
+}
 // calcul function
+
 function averHor(x,y) {
 	if (x == 0) {
 		if ((x+600+y)/2>400) {
@@ -127,23 +175,63 @@ function averRed(x,y) {
 		return y-x
 	}
 }
+function setDisplay(){
+	closeNav();
+	openOnDemand();
+}
+function setDatum(){
+	standardDevAng = parseFloat(document.getElementById("stdDev").value);
+	zInitial = parseFloat(document.getElementById("zInitial").value);
+	xInitial = parseFloat(document.getElementById("xInitial").value);
+	yInitial = parseFloat(document.getElementById("yInitial").value);
+	bearing = parseFloat(document.getElementById("bearing").value);
+	closeOnDemand();
+}
+document.getElementById("submit").addEventListener("click", setDatum);
+function getValueGrade(x){
+	let temp = 0;
+	temp = parseFloat(document.getElementById(x).value);
+	if (validityGrade(temp) == true) {
+		return temp;
+	} else {
+		alert("invalide, should be between 0 & 400!")
+	}
+}
+function getValueEDMI(x) {
+	let temp = 0;
+	temp = parseFloat(document.getElementById(x).value);
+	if (validityEDMI(temp) == true) {
+		return temp;
+	} else {
+		alert("invalide, should be above 0!")
+	}
+}
+function getValueHeight(x) {
+	let temp = 0;
+	temp = parseFloat(document.getElementById(x).value);
+	if (validityHeight(temp) == true) {
+		return temp;
+	} else {
+		alert("invalide, should between 1 & 2!")
+	}
+}
 function getValues() {
-	horD1 = parseFloat(document.getElementById("ahg").value); //  1 for foresight and 2 for backsight, D=Direct, R=reverse
-	horR1 = parseFloat(document.getElementById("ahd").value);
-	verD1 = parseFloat(document.getElementById("avg").value);
-	verR1 = parseFloat(document.getElementById("avd").value);
-	distoD1 = parseFloat(document.getElementById("adg").value);
-	distoR1 = parseFloat(document.getElementById("add").value);
-	horD2 = parseFloat(document.getElementById("bhg").value);
-	horG2 = parseFloat(document.getElementById("bhd").value);
-	verD2 = parseFloat(document.getElementById("bvg").value);
-	verG2 = parseFloat(document.getElementById("bvd").value);
-	distoD2 = parseFloat(document.getElementById("bdg").value);
-	distoR2 = parseFloat(document.getElementById("bdd").value);
-	stationNum = parseFloat(document.getElementById("ids").value);
-	hautid = parseFloat(document.getElementById("ht").value);
-	htA = parseFloat(document.getElementById("hta").value);
-	htB = parseFloat(document.getElementById("htb").value);
+	horD1 = getValueGrade("ahg"); //  1 for foresight and 2 for backsight, D=Direct, R=reverse
+	horR1 = getValueGrade("ahd");
+	verD1 = getValueGrade("avg");
+	verR1 = getValueGrade("avd");
+	distoD1 = getValueEDMI("adg");
+	distoR1 = getValueEDMI("add");
+	horD2 = getValueGrade("bhg");
+	horG2 = getValueGrade("bhd");
+	verD2 = getValueGrade("bvg");
+	verG2 = getValueGrade("bvd");
+	distoD2 = getValueEDMI("bdg");
+	distoR2 = getValueEDMI("bdd");
+	// stationNum = parseFloat(document.getElementById("ids").value);
+	hautid = getValueHeight("ht");
+	htA = getValueHeight("hta");
+	htB = getValueHeight("htb");
 }
 function calc() {
 
@@ -178,16 +266,39 @@ function displayStationCalcul(){
 	document.getElementById('mbd').innerHTML = roundTo(mbd,3);
 	document.getElementById('smr').innerHTML = roundTo(smr,4);
 }
-
+function validityGrade(x){
+	if (x < 0  || x > 400) {
+		return false
+	} else {
+		return true
+	}
+}
+function validityEDMI(x){
+	// if (x > 500) {
+	// 	calcul correction earth curve
+	// }
+	if (x <= 0) {
+		return false
+	} else {
+		return true
+	}
+}
+function validityHeight(x) {
+	if (x < 1 || x > 2 ) {
+		return false
+	} else {
+		return true
+	}
+}
 document.getElementById("calc").addEventListener("click", displayStationCalcul);
 // fonction calcul pour éventuellement vérifier une station avant d'enregistrer:
-
+document.getElementById("set").addEventListener("click", setDisplay);
 document.getElementById("record").addEventListener("click", record);
 function record() {
 	getValues();
 	calc();
 let statio = {
-	stationid: stationNum,
+	stationid: (poly.length) + 1,
 	hautid: hautid,
 	htA: htA,
 	htB: htB,
@@ -220,6 +331,7 @@ let statio = {
 poly.push(statio);
 let num = (poly.length) - 1
 	alert("You have recorded station: " +poly[num].stationid);
+	displayNumber.innerHTML = "Station n°"+((poly.length) + 1);
 }
 
 document.getElementById("calculpoly").addEventListener("click", calculpoly);
@@ -271,7 +383,7 @@ function calculpoly() {
 	});
 	for(let i = 0; i < poly.length; i++){
 		if (i==0) {
-			gis.push(100);
+			gis.push(bearing);
 		} else {
 			if (gis[i-1]+poly[i].smr+200<400) {
 				gis.push(gis[i-1]+poly[i].smr+200);
@@ -286,8 +398,8 @@ function calculpoly() {
 	}
 	for(let i = 0; i < poly.length + 1; i++){
 		if (i==0) {
-			cooProvX.push(500);
-			cooProvY.push(500);
+			cooProvX.push(xInitial);
+			cooProvY.push(yInitial);
 		} else {
 			cooProvX.push(cooProvX[i-1]+deltaX[i-1]);
 			cooProvY.push(cooProvY[i-1]+deltaY[i-1]);
@@ -344,7 +456,7 @@ function calculpoly() {
 	}
 	for(let i = 0; i < poly.length + 1; i++){
 		if (i==0) {
-			cooZ.push(400);
+			cooZ.push(zInitial);
 		} else {
 			cooZ.push(cooZ[i-1]+zdeltaComp[i-1]);
 		}
@@ -381,13 +493,134 @@ function calculpoly() {
 // console.log('z delta compensé: ', zdeltaComp);
 // console.log('coo z: ', cooZ);
 
-let message = "coordonnées" + " #" + " x" + " y" + " z"+ "\r\n";
-	for(let i = 0; i < poly.length; i++){
-		message += 'Station ' + [i+1] + ' ' + roundTo(cooX[i],4) + ' '
-		+roundTo(cooY[i],4)+ ' '+ roundTo(cooZ[i],4)+ "\r\n";
-	}
-	alert(message)
+	fillTable();
+	displayResult();
 }
+function fillTable () {
+	table = document.createElement("table"),
+    row = table.insertRow();
+	let cell1 = row.insertCell();
+	cell1.innerHTML = '#';
+	let cell2 = row.insertCell();
+	cell2.innerHTML = 'x';
+	let cell3 = row.insertCell();
+	cell3.innerHTML = 'y';
+	let cell4 = row.insertCell();
+	cell4.innerHTML = 'z';
+	for(let i = 0; i < poly.length; i++){	
+      	row = table.insertRow();
+		  for (let index = 0; index <= 3; index++) {
+			  switch (index) {
+				  	case 0:
+						let cell5 = row.insertCell();
+						cell5.innerHTML = 'Station ' + [i+1];
+					break;
+					case 1:
+						let cell6 = row.insertCell();
+						cell6.innerHTML = roundTo(cooX[i],2);
+					break;
+					case 2:
+						let cell7 = row.insertCell();
+						cell7.innerHTML = roundTo(cooY[i],2);
+					break;
+					case 3:
+						let cell8 = row.insertCell();
+						cell8.innerHTML = roundTo(cooZ[i],2);
+					break;
+				  	default:
+					break;
+			  }  
+		  }
+	}
+	document.getElementById("displayCoo").appendChild(table);
+	let data=[
+		{
+			opacity:0.8,
+			type: 'scatter3d',
+			x: cooX, 
+			y: cooY, 
+			z: cooZ, 
+			value: [1,2,3],
+			marker: {
+				size: 5,
+				color: 'blue',
+				colorscale: "Greens",
+			}, 
+		},
+	];
+	let layout = {
+		title: "",
+		height: 360,
+  		width: 360,
+		autosize: false,
+		showlegend: false,
+		scene:{
+			xaxis: {
+			 spikecolor: '#1fe5bd',
+			 spikesides: false,
+			 spikethickness: 3,
+			 mirror : "none",
+			 title : "x",
+			 range: [Math.min(...cooX)-5, Math.max(...cooX)+5],
+			 color: '#a16423f2',
+			   },
+		   yaxis: {
+			 spikecolor: '#1fe5bd',
+			 spikesides: false,
+			 spikethickness: 3,
+			 title : "y",
+			 range: [Math.min(...cooY)-5, Math.max(...cooY)+5],
+			  },
+		   zaxis: {
+			 spikecolor: '#1fe5bd',
+			 spikesides: false,
+			 spikethickness: 3,
+			 showgrid : false,
+			 nticks: 4,
+			 range: [Math.min(...cooZ)-5, Math.max(...cooZ)+5],
+			 title : "",
+			 color: '#b1a9a096',
+			  },
+			camera: {
+				projection: {
+					type: "orthographic"
+				},
+				eye: {
+					x: -1.25,
+					y: -1.25,
+				},
+			},
+		//legend = {1, 2, 3, 4}
+	    },
+	};
+	Plotly.newPlot('chart3d', data, layout);
+}
+function fillCard() {
+	document.getElementById("hta").value = "Kat";
+	document.getElementById("ahg").value = "Kat";
+	document.getElementById("avg").value = "Kat";
+	document.getElementById("adg").value = "Kat";
+	document.getElementById("ahd").value = "Kat";
+	document.getElementById("avd").value = "Kat";
+	document.getElementById("add").value = "Kat";
+	document.getElementById("htb").value = "Kat";
+	document.getElementById("bhg").value = "Kat";
+	document.getElementById("bvg").value = "Kat";
+	document.getElementById("bdg").value = "Kat";
+	document.getElementById("bhd").value = "Kat";
+	document.getElementById("bvd").value = "Kat";
+	document.getElementById("bdd").value = "Kat";
+  }
+
+/* <thead>
+<tr>
+<th>#</th>
+<th>x</th>
+<th>y</th>
+<th>z</th>
+</tr>
+</thead>  */
+
 // document.getElementById("afficher").addEventListener("click", afficher);
 // function afficher(){
 // 	let i = parseInt(prompt("Please enter whiche one: "));
@@ -397,4 +630,47 @@ let message = "coordonnées" + " #" + " x" + " y" + " z"+ "\r\n";
 // document.getElementById("afficher").addEventListener("click", pageDisplay);
 // function pageDisplay() {
 //   href="#display";
+// }
+//Make the DIV element draggagle:
+// dragElement(document.getElementById("modal"));
+
+// function dragElement(elmnt) {
+//   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+//   if (document.getElementById("modal-content")) {
+//     /* if present, the header is where you move the DIV from:*/
+//     document.getElementById("modal-content").onmousedown = dragMouseDown;
+//   } else {
+//     /* otherwise, move the DIV from anywhere inside the DIV:*/
+//     elmnt.onmousedown = dragMouseDown;
+//   }
+
+//   function dragMouseDown(e) {
+//     e = e || window.event;
+//     e.preventDefault();
+//     // get the mouse cursor position at startup:
+//     pos3 = e.clientX;
+//     pos4 = e.clientY;
+//     document.onmouseup = closeDragElement;
+//     // call a function whenever the cursor moves:
+//     document.onmousemove = elementDrag;
+//   }
+
+//   function elementDrag(e) {
+//     e = e || window.event;
+//     e.preventDefault();
+//     // calculate the new cursor position:
+//     pos1 = pos3 - e.clientX;
+//     pos2 = pos4 - e.clientY;
+//     pos3 = e.clientX;
+//     pos4 = e.clientY;
+//     // set the element's new position:
+//     elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+//     elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+//   }
+
+//   function closeDragElement() {
+//     /* stop moving when mouse button is released:*/
+//     document.onmouseup = null;
+//     document.onmousemove = null;
+//   }
 // }
