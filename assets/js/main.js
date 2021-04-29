@@ -109,7 +109,7 @@ function closeOnDemand(){
 		let smr = 0;
 // end decla
 displayNumber.innerHTML = "Station n°"+((poly.length) + 1);
-function displayNumber() {
+function displayfNumber() {
 	
 }
 document.getElementById("displayStations").addEventListener("click", displayStlist);
