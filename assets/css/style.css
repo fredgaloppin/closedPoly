@@ -11,23 +11,37 @@ html {
   font-size: 62.5%;
 }
 
+.onDemand {
+  z-index: 2;
+  height: 200px;
+  width: 340px;
+  position: fixed;
+  top: 8%;
+  color: #fff;
+  position: fixed;
+  background-color: #444444;
+}
+
 .sidepanel {
-  width: 0;
+  width: 0px;
   position: fixed;
   z-index: 1;
-  height: 200px;
   background-color: #444444;
   overflow-x: hidden;
-  -webkit-transition: 0.5s;
-  transition: 0.5s;
-  padding-top: 4.5rem;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+  padding-top: 4rem;
+}
+
+.btn-group .button {
+  border-radius: 0px;
 }
 
 .sidepanel a {
   padding: 6px 8px 6px 10px;
   text-decoration: none;
   font-size: 25px;
-  color: #818181;
+  color: white;
   display: block;
   -webkit-transition: 0.2s;
   transition: 0.2s;
@@ -40,15 +54,15 @@ html {
 .sidepanel .closebtn {
   position: absolute;
   top: 0;
-  right: 25px;
-  font-size: 36px;
+  right: 5px;
+  font-size: 32px;
 }
 
 .openbtn {
   font-size: 20px;
   cursor: pointer;
   background-color: #111;
-  color: white;
+  margin-left: 5px;
   border: none;
 }
 
@@ -59,7 +73,7 @@ html {
 body {
   background-color: #d1d1d1;
   color: #253746;
-  font-family: 'Roboto', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  font-family: 'Trebuchet MS', 'Tahoma', 'Arial', sans-serif;
   font-size: 1.6em;
   font-weight: 300;
   letter-spacing: 0.01em;
@@ -71,11 +85,12 @@ h3 {
 }
 
 .highTitle {
-  font-weight: 500;
+  font-weight: 550;
   margin-left: 3rem;
   font-size: 2rem;
   letter-spacing: -0.05rem;
   line-height: 2;
+  color: black;
 }
 
 .title {
@@ -86,14 +101,6 @@ h3 {
   letter-spacing: -0.05rem;
   line-height: 1.5;
   margin-right: 2.5rem;
-}
-
-.wrapper {
-  background: url("../img/background.png") #606c767a;
-  background-size: cover;
-  max-width: 36rem;
-  margin: 0 auto;
-  min-height: 66.7rem;
 }
 
 .targetBackSight {
@@ -110,6 +117,7 @@ h3 {
 
 input {
   border-radius: 8px;
+  outline: none;
 }
 
 blockquote {
@@ -125,6 +133,9 @@ blockquote *:last-child {
 
 .mainButton {
   width: 10.5rem;
+  background-color: rgba(93, 40, 109, 0.7);
+  border-radius: 1rem;
+  padding: 0.5rem;
 }
 
 .button,
@@ -132,9 +143,8 @@ button,
 input[type='button'],
 input[type='reset'],
 input[type='submit'] {
-  background-color: rgba(93, 40, 109, 0.7);
+  background-color: #253746a6;
   border: 0.1rem solid #d1d1d1;
-  border-radius: 1rem;
   color: #fff;
   cursor: pointer;
   display: inline-block;
@@ -142,7 +152,6 @@ input[type='submit'] {
   font-weight: 700;
   letter-spacing: 0.1rem;
   line-height: 2.5rem;
-  padding: 0.5rem;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
@@ -161,7 +170,6 @@ input[type='submit']:hover {
   background-color: #253746a6;
   border-color: #253746a6;
   color: #fff;
-  outline: 0;
 }
 
 code {
@@ -238,7 +246,6 @@ input:not([type]):focus,
 textarea:focus,
 select:focus {
   border-color: rgba(93, 40, 109, 0.7);
-  outline: 0;
 }
 
 select {
@@ -285,10 +292,10 @@ input[type='radio'] {
 
 .container {
   margin: 0 auto;
-  max-width: 112rem;
-  padding: 0 2rem;
-  position: relative;
-  width: 100%;
+  background: url("../img/background.png") #606c767a;
+  background-size: cover;
+  max-width: 36rem;
+  min-height: 66.7rem;
 }
 
 header {
@@ -563,8 +570,8 @@ button,
 dd,
 dt,
 li {
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 blockquote,
@@ -618,7 +625,7 @@ strong {
 }
 
 p {
-  margin-top: 0;
+  margin-top: 0.5rem;
   margin-left: 4rem;
 }
 
@@ -679,5 +686,82 @@ h6 {
 
 .float-right {
   float: right;
+}
+
+/* The Modal (background) */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  /* Stay in place */
+  z-index: 1;
+  /* Sit on top */
+  padding-top: 100px;
+  /* Location of the box */
+  left: 0;
+  top: 0;
+  max-width: 40rem;
+  width: 100%;
+  /* Full width */
+  height: 100%;
+  /* Full height */
+  overflow: auto;
+  /* Enable scroll if needed */
+  background-color: #606c76;
+  /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.6);
+  /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+  position: relative;
+  background-color: #d1d1d1;
+  margin: auto;
+  padding: 0rem;
+  max-width: 36rem;
+  -webkit-box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-animation-name: animateright;
+  -webkit-animation-duration: 0.6s;
+  animation-name: animateright;
+  animation-duration: 0.6s;
+}
+
+/* Add Animation */
+@-webkit-keyframes animateright {
+  from {
+    right: -300px;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+@keyframes animateright {
+  from {
+    right: -300px;
+    opacity: 0;
+  }
+  to {
+    right: 0;
+    opacity: 1;
+  }
+}
+
+/* The Close Button */
+.close {
+  color: #fff;
+  font-size: 1.6em;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
 }
 /*# sourceMappingURL=style.css.map */
