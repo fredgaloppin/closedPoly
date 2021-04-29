@@ -413,8 +413,8 @@ function calculpoly() {
 	}
 	for(let i = 0; i < poly.length + 1; i++){
 		if (i==0) {
-			cooX.push(500);
-			cooY.push(500);
+			cooX.push(xInitial);
+			cooY.push(yInitial);
 		} else {
 			cooX.push(cooX[i-1]+deltaCompX[i-1]);
 			cooY.push(cooY[i-1]+deltaCompY[i-1]);
