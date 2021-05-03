@@ -70,6 +70,63 @@ html {
   background-color: rgba(68, 68, 68, 0.7);
 }
 
+ul {
+  list-style-type: none;
+  padding: 0;
+  overflow: hidden;
+  background-color: #253746a6;
+  margin: 0rem 0rem 0rem 1.5rem;
+}
+
+ul a {
+  cursor: pointer;
+}
+
+li {
+  float: left;
+}
+
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 2px 2px;
+  text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: #b63333;
+}
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9f6;
+  -webkit-box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+          box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 0.2rem 5.5rem;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #b63333;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
 body {
   background-color: #d1d1d1;
   color: #253746;
@@ -86,10 +143,10 @@ h3 {
 
 .highTitle {
   font-weight: 550;
-  margin-left: 3rem;
+  display: inline-block;
   font-size: 2rem;
   letter-spacing: -0.05rem;
-  line-height: 2;
+  line-height: 1.25;
   color: black;
 }
 
@@ -528,12 +585,11 @@ img {
 }
 
 a {
-  color: rgba(93, 40, 109, 0.7);
   text-decoration: none;
 }
 
 a:focus, a:hover {
-  color: #606c76;
+  color: black;
 }
 
 dl,
