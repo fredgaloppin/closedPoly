@@ -1,7 +1,3 @@
-// à integrer: 
-//			correction sphericite terre eventuel; 
-//			
-//			alert? ecarts trop important  + tout calcul ecart typ appareil				
 
 // ------------function menu de boutons------------------------------------
 function openNav() {
@@ -29,17 +25,17 @@ function closeOnDemand(){
            // When the user clicks on <span> (x), close the modal
            span.onclick = function() {
              modal.style.display = "none";
-			emptyContent();
+			emptyContent("displayCoo");
            }
            // When the user clicks anywhere outside of the modal, close it
            window.onclick = function(event) {
              if (event.target == modal) {
                modal.style.display = "none";
-			   emptyContent();
+			   emptyContent("displayCoo");
              }
            }
-        function emptyContent() {
-			let content = document.getElementById("displayCoo");
+        function emptyContent(idName) {
+			let content = document.getElementById(idName);
 				 while (content.hasChildNodes()) {
 					 content.removeChild(content.firstChild);
 					}
@@ -49,6 +45,7 @@ function closeOnDemand(){
 	// ------ array -- data,  stations bonded//
 		let pop = document.getElementById('onDemand');
 		let displayNumber = document.getElementById('number');
+		let linkSt = document.getElementById('linkSt');
 		let standardDevAng = 0.01;
 		let zInitial = 400;
 		let xInitial = 500;
@@ -78,6 +75,7 @@ function closeOnDemand(){
 		let zdeltaComp = [];
 		let cooZ = [];
 	// -----var decla-----
+		let selected = 0;
 		let horD1 = 0;
 		let horR1 = 0;
 		let verD1 = 0;
@@ -85,8 +83,8 @@ function closeOnDemand(){
 		let distoD1 = 0;
 		let distoR1 = 0;
 		let horD2 = 0;
-		let horG2 = 0;
-		let verD2 = 0;
+		let horR2 = 0;
+		let verR2 = 0;
 		let verG2 = 0;
 		let distoD2 = 0;
 		let distoR2 = 0;
@@ -108,21 +106,55 @@ function closeOnDemand(){
 		let mbd = 0;
 		let smr = 0;
 // end decla
-displayNumber.innerHTML = "Station n°"+((poly.length) + 1);
-function displayfNumber() {
-	
-}
-document.getElementById("displayStations").addEventListener("click", displayStlist);
-function displayStlist() {
-	if (poly.length == 0) {
-		alert("no stations recorded yet");
-	} else {
-		let choiceList = document.createElement("LI");
-		var textnode = document.createTextNode("Water");         
-		choiceList.appendChild(textnode);
-		displayNumber.appendChild(choiceList);
 
+
+resetData();
+
+function displayStlist() {
+	emptyContent("linkSt");
+		for (let index = 0; index < poly.length; index++) {
+			let newA = document.createElement("a");
+			let textLink = document.createTextNode(index+1);
+			newA.appendChild(textLink);
+			let tempo = index;
+			newA.classList.add(tempo);
+			linkSt.appendChild(newA);
+		}
+		let lastA = document.createElement("a");
+		let textLink = document.createTextNode((poly.length) + 1);
+		lastA.appendChild(textLink);
+		lastA.classList.add(poly.length);
+		linkSt.appendChild(lastA);
+		displayNumber.innerHTML = "Station n°"+((poly.length) + 1)+ " ▾";
 	}
+	document.getElementById("reset").addEventListener("click", resetData);
+function resetData () {
+	poly = [];
+	dishorArr = [];
+	dishorAva = [];
+	dishorEcar = [];
+	dishorMoy = [];
+	proportion = [];
+	compAng = [];
+	angleIntC = [];
+	gis = []; 
+	deltaX = [];
+	deltaY = [];
+	cooProvX = [];
+	cooProvY = [];
+	deltaCompX = [];
+	deltaCompY = [];
+	cooX = [];
+	cooY = [];
+	zAr = [];
+	zAv = [];
+	zecart = [];
+	zdelta = [];
+	zProv = [];
+	zdeltaComp = [];
+	cooZ = [];
+	selected = 0;
+	displayStlist();
 }
 // calcul function
 
@@ -223,12 +255,11 @@ function getValues() {
 	distoD1 = getValueEDMI("adg");
 	distoR1 = getValueEDMI("add");
 	horD2 = getValueGrade("bhg");
-	horG2 = getValueGrade("bhd");
+	horR2 = getValueGrade("bhd");
 	verD2 = getValueGrade("bvg");
-	verG2 = getValueGrade("bvd");
+	verR2 = getValueGrade("bvd");
 	distoD2 = getValueEDMI("bdg");
 	distoR2 = getValueEDMI("bdd");
-	// stationNum = parseFloat(document.getElementById("ids").value);
 	hautid = getValueHeight("ht");
 	htA = getValueHeight("hta");
 	htB = getValueHeight("htb");
@@ -236,13 +267,13 @@ function getValues() {
 function calc() {
 
 	mah = averHor(horD1,horR1);
-	mbh = averHor(horD2,horG2);
+	mbh = averHor(horD2,horR2);
 	eah = gapHor(horD1,horR1);
-	ebh = gapHor(horD2,horG2);
+	ebh = gapHor(horD2,horR2);
 	mav = averVer (verD1,verR1);
-	mbv = averVer (verD2,verG2);
+	mbv = averVer (verD2,verR2);
 	eav = gapVer (verD1,verR1);
-	ebv = gapVer (verD2,verG2);
+	ebv = gapVer (verD2,verR2);
 	ead = gapDis (distoD1,distoR1);
 	ebd = gapDis (distoD2,distoR2);
 	mad = averDis (distoD1,distoR1);
@@ -298,7 +329,6 @@ function record() {
 	getValues();
 	calc();
 let statio = {
-	stationid: (poly.length) + 1,
 	hautid: hautid,
 	htA: htA,
 	htB: htB,
@@ -310,8 +340,8 @@ let statio = {
 	horD2: horD2,
 	verD2: verD2,
 	distoR1: distoR1,
-	verG2: verG2,
-	horG2: horG2,
+	verR2: verR2,
+	horR2: horR2,
 	distoD2: distoD2,
 	distoR2: distoR2,
 	eav: eav,
@@ -328,173 +358,149 @@ let statio = {
 	mbd: mbd,
 	smr: smr,
   };
-poly.push(statio);
-let num = (poly.length) - 1
-	alert("You have recorded station: " +poly[num].stationid);
-	displayNumber.innerHTML = "Station n°"+((poly.length) + 1);
+poly[selected] = statio;
+	alert("You have recorded station: " +(parseInt(selected)+1));
+	if (selected === (poly.length)-1) {
+		displayStlist();
+		selected ++;
+	} else {
+		
+	}
 }
 
 document.getElementById("calculpoly").addEventListener("click", calculpoly);
 function calculpoly() {
-	for(let i = 0; i < poly.length; i++){
-		let num = (poly.length) - 1
-		if (i==0) {
-			let r = ((poly[num].mbv)/200)*(Math.PI);
-			dishorArr.push(Math.sin(r)*poly[num].mbd);
-			let s = ((poly[i].mav)/200)*(Math.PI);
-			dishorAva.push(Math.sin(s)*poly[i].mad);
+	if (poly.length == 0) {
+		alert("no stations recorded yet");
 		} else {
-			let r = ((poly[i-1].mbv)/200)*(Math.PI);
-			dishorArr.push(Math.sin(r)*poly[i-1].mbd);
-			let s = ((poly[i].mav)/200)*(Math.PI);
-			dishorAva.push(Math.sin(s)*poly[i].mad);
-		}
-		dishorEcar.push(Math.abs(1000*(dishorArr[i]-dishorAva[i])));
-		dishorMoy.push((dishorArr[i]+dishorAva[i])/2);
-	}
-	let totalMdist = dishorMoy.reduce((a, b) => {
-		return a + b;
-	});
-	for(let i = 0; i < poly.length; i++){
-		let num = (poly.length) - 1
-		if (i==0) {
-			proportion.push(100*((1/dishorMoy[num])+(1/dishorMoy[1])));
-		} else {
-			proportion.push(100*((1/dishorMoy[i-1])+(1/dishorMoy[1])));
-		}
-	}
-	let totalP = proportion.reduce((a, b) => {
-		return a + b;
-	});
-	let totaldist = dishorMoy.reduce((a, b) => {
-		return a + b;
-	});
-	let totalAngleInterne = poly.reduce(function(a, b){
-		return a + b.smr;
-	},0);
-	let angleTheorique = 200*(poly.length -2);
-	let fermetureAngulaire = angleTheorique-totalAngleInterne;
-	for(let i = 0; i < poly.length; i++){
-			compAng.push(fermetureAngulaire/totalP*proportion[i]);
-			angleIntC.push(compAng[i]+poly[i].smr);
-	}
-	let totalAngleComp = angleIntC.reduce((a, b) => {
-		return a + b;
-	});
-	for(let i = 0; i < poly.length; i++){
-		if (i==0) {
-			gis.push(bearing);
-		} else {
-			if (gis[i-1]+poly[i].smr+200<400) {
-				gis.push(gis[i-1]+poly[i].smr+200);
+		for(let i = 0; i < poly.length; i++){
+			let num = (poly.length) - 1
+			if (i==0) {
+				let r = ((poly[num].mbv)/200)*(Math.PI);
+				dishorArr.push(Math.sin(r)*poly[num].mbd);
+				let s = ((poly[i].mav)/200)*(Math.PI);
+				dishorAva.push(Math.sin(s)*poly[i].mad);
 			} else {
-				gis.push(gis[i-1]+poly[i].smr-200);
+				let r = ((poly[i-1].mbv)/200)*(Math.PI);
+				dishorArr.push(Math.sin(r)*poly[i-1].mbd);
+				let s = ((poly[i].mav)/200)*(Math.PI);
+				dishorAva.push(Math.sin(s)*poly[i].mad);
+			}
+			dishorEcar.push(Math.abs(1000*(dishorArr[i]-dishorAva[i])));
+			dishorMoy.push((dishorArr[i]+dishorAva[i])/2);
+		}
+		let totalMdist = dishorMoy.reduce((a, b) => {
+			return a + b;
+		});
+		for(let i = 0; i < poly.length; i++){
+			let num = (poly.length) - 1
+			if (i==0) {
+				proportion.push(100*((1/dishorMoy[num])+(1/dishorMoy[1])));
+			} else {
+				proportion.push(100*((1/dishorMoy[i-1])+(1/dishorMoy[1])));
 			}
 		}
-	}
-	for(let i = 0; i < poly.length; i++){
-		deltaX.push(dishorMoy[i]*Math.sin(gis[i]/200*Math.PI));
-		deltaY.push(dishorMoy[i]*Math.cos(gis[i]/200*Math.PI));
-	}
-	for(let i = 0; i < poly.length + 1; i++){
-		if (i==0) {
-			cooProvX.push(xInitial);
-			cooProvY.push(yInitial);
-		} else {
-			cooProvX.push(cooProvX[i-1]+deltaX[i-1]);
-			cooProvY.push(cooProvY[i-1]+deltaY[i-1]);
+		let totalP = proportion.reduce((a, b) => {
+			return a + b;
+		});
+		let totaldist = dishorMoy.reduce((a, b) => {
+			return a + b;
+		});
+		let totalAngleInterne = poly.reduce(function(a, b){
+			return a + b.smr;
+		},0);
+		let angleTheorique = 200*(poly.length -2);
+		let fermetureAngulaire = angleTheorique-totalAngleInterne;
+		for(let i = 0; i < poly.length; i++){
+				compAng.push(fermetureAngulaire/totalP*proportion[i]);
+				angleIntC.push(compAng[i]+poly[i].smr);
 		}
-	}
-	let fermeturePlaniProvX = 100*(cooProvX[0]-cooProvX[cooProvX.length - 1]);
-	let fermeturePlaniProvY = 100*(cooProvY[0]-cooProvY[cooProvY.length - 1]);
-	for(let i = 0; i < poly.length; i++){
-		deltaCompX.push((fermeturePlaniProvX/100)/totalMdist*dishorMoy[i]+deltaX[i]);
-		deltaCompY.push((fermeturePlaniProvY/100)/totalMdist*dishorMoy[i]+deltaY[i]);
-	}
-	for(let i = 0; i < poly.length + 1; i++){
-		if (i==0) {
-			cooX.push(xInitial);
-			cooY.push(yInitial);
-		} else {
-			cooX.push(cooX[i-1]+deltaCompX[i-1]);
-			cooY.push(cooY[i-1]+deltaCompY[i-1]);
+		let totalAngleComp = angleIntC.reduce((a, b) => {
+			return a + b;
+		});
+		for(let i = 0; i < poly.length; i++){
+			if (i==0) {
+				gis.push(bearing);
+			} else {
+				if (gis[i-1]+poly[i].smr+200<400) {
+					gis.push(gis[i-1]+poly[i].smr+200);
+				} else {
+					gis.push(gis[i-1]+poly[i].smr-200);
+				}
+			}
 		}
-	}
-	let fermeturePlaniX = 1000*(cooX[0]-cooX[poly.length]);
-	let fermeturePlaniY = 1000*(cooY[0]-cooY[poly.length]);
-	// Altitude --------------------------------------------------------------------
-	for(let i = 0; i < poly.length; i++){
-		let num = (poly.length) - 1
-		if (i==0) {
-			let r = ((poly[num].mbv)/200)*(Math.PI);
-			zAr.push(Math.cos(r)*poly[num].mbd + poly[num].hautid - poly[num].htB);
-			let s = ((poly[i].mav)/200)*(Math.PI);
-			zAv.push(Math.cos(s)*poly[i].mad + poly[i].hautid - poly[i].htA);
-		} else {
-			let r = ((poly[i-1].mbv)/200)*(Math.PI);
-			zAr.push(Math.cos(r)*poly[i-1].mbd + poly[i-1].hautid - poly[i-1].htB);
-			let s = ((poly[i].mav)/200)*(Math.PI);
-			zAv.push(Math.cos(s)*poly[i].mad  + poly[i].hautid - poly[i].htA);
+		for(let i = 0; i < poly.length; i++){
+			deltaX.push(dishorMoy[i]*Math.sin(gis[i]/200*Math.PI));
+			deltaY.push(dishorMoy[i]*Math.cos(gis[i]/200*Math.PI));
 		}
-		zecart.push(1000*(Math.abs(zAr[i])-Math.abs(zAv[i])));
-		if (zAr>zAv) {
-			zdelta.push((Math.abs(zAr[i])+Math.abs(zAv[i]))/2);
-		} else {
-			zdelta.push(-(Math.abs(zAr[i])+Math.abs(zAv[i]))/2);			
+		for(let i = 0; i < poly.length + 1; i++){
+			if (i==0) {
+				cooProvX.push(xInitial);
+				cooProvY.push(yInitial);
+			} else {
+				cooProvX.push(cooProvX[i-1]+deltaX[i-1]);
+				cooProvY.push(cooProvY[i-1]+deltaY[i-1]);
+			}
 		}
-	}
-	for(let i = 0; i < poly.length + 1; i++){
-		if (i==0) {
-			zProv.push(400);
-		} else {
-			zProv.push(zProv[i-1]+zdelta[i-1]);
+		let fermeturePlaniProvX = 100*(cooProvX[0]-cooProvX[cooProvX.length - 1]);
+		let fermeturePlaniProvY = 100*(cooProvY[0]-cooProvY[cooProvY.length - 1]);
+		for(let i = 0; i < poly.length; i++){
+			deltaCompX.push((fermeturePlaniProvX/100)/totalMdist*dishorMoy[i]+deltaX[i]);
+			deltaCompY.push((fermeturePlaniProvY/100)/totalMdist*dishorMoy[i]+deltaY[i]);
 		}
-	}
-	let fermetureProvZ = 1000*(zProv[0]-zProv[poly.length]);
-	for(let i = 0; i < poly.length; i++){
-		zdeltaComp.push(zdelta[i]+(fermetureProvZ/1000)*dishorMoy[i]/totalMdist)
-	}
-	for(let i = 0; i < poly.length + 1; i++){
-		if (i==0) {
-			cooZ.push(zInitial);
-		} else {
-			cooZ.push(cooZ[i-1]+zdeltaComp[i-1]);
+		for(let i = 0; i < poly.length + 1; i++){
+			if (i==0) {
+				cooX.push(xInitial);
+				cooY.push(yInitial);
+			} else {
+				cooX.push(cooX[i-1]+deltaCompX[i-1]);
+				cooY.push(cooY[i-1]+deltaCompY[i-1]);
+			}
 		}
+		let fermeturePlaniX = 1000*(cooX[0]-cooX[poly.length]);
+		let fermeturePlaniY = 1000*(cooY[0]-cooY[poly.length]);
+		// Altitude --------------------------------------------------------------------
+		for(let i = 0; i < poly.length; i++){
+			let num = (poly.length) - 1
+			if (i==0) {
+				let r = ((poly[num].mbv)/200)*(Math.PI);
+				zAr.push(Math.cos(r)*poly[num].mbd + poly[num].hautid - poly[num].htB);
+				let s = ((poly[i].mav)/200)*(Math.PI);
+				zAv.push(Math.cos(s)*poly[i].mad + poly[i].hautid - poly[i].htA);
+			} else {
+				let r = ((poly[i-1].mbv)/200)*(Math.PI);
+				zAr.push(Math.cos(r)*poly[i-1].mbd + poly[i-1].hautid - poly[i-1].htB);
+				let s = ((poly[i].mav)/200)*(Math.PI);
+				zAv.push(Math.cos(s)*poly[i].mad  + poly[i].hautid - poly[i].htA);
+			}
+			zecart.push(1000*(Math.abs(zAr[i])-Math.abs(zAv[i])));
+			if (zAr>zAv) {
+				zdelta.push((Math.abs(zAr[i])+Math.abs(zAv[i]))/2);
+			} else {
+				zdelta.push(-(Math.abs(zAr[i])+Math.abs(zAv[i]))/2);			
+			}
+		}
+		for(let i = 0; i < poly.length + 1; i++){
+			if (i==0) {
+				zProv.push(400);
+			} else {
+				zProv.push(zProv[i-1]+zdelta[i-1]);
+			}
+		}
+		let fermetureProvZ = 1000*(zProv[0]-zProv[poly.length]);
+		for(let i = 0; i < poly.length; i++){
+			zdeltaComp.push(zdelta[i]+(fermetureProvZ/1000)*dishorMoy[i]/totalMdist)
+		}
+		for(let i = 0; i < poly.length + 1; i++){
+			if (i==0) {
+				cooZ.push(zInitial);
+			} else {
+				cooZ.push(cooZ[i-1]+zdeltaComp[i-1]);
+			}
+		}
+		fillTable();
+		displayResult();
 	}
-// console.log('dist hor Arr: ', dishorArr);
-// console.log('dist hor Ava: ', dishorAva);
-// console.log('dist hor Ecar: ', dishorEcar);
-// console.log('dist hor Moy: ', dishorMoy);
-// console.log('Total dist: ', totalMdist);
-// console.log('dist pour P: ', proportion);
-// console.log('total P: ', totalP);
-// console.log('perimeter intermédiaire : ', totaldist);
-// console.log('sum angle interne : ', totalAngleInterne);
-// console.log('angl théo : ', angleTheorique);
-// console.log('Fermeture : ', fermetureAngulaire);
-// console.log('Compensation A : ', compAng);
-// console.log('Total Angle Int Comp : ', totalAngleComp);
-// console.log('Gisment : ', gis);
-// console.log('delta X : ', deltaX);
-// console.log('delta Y : ', deltaY);
-// console.log('X prov: ', cooProvX);
-// console.log('Y prov: ', cooProvY);
-// console.log('Fermeture plani prov: x:', fermeturePlaniProvX, 'y: ', fermeturePlaniProvY);
-// console.log('delta X : ', deltaCompX);
-// console.log('delta Y : ', deltaCompY);
-// console.log('coo X : ', cooX);
-// console.log('coo Y : ', cooY);
-// console.log('Fermeture plani: x:', fermeturePlaniX, 'y: ', fermeturePlaniY);
-// console.log('z Arr: ', zAr);
-// console.log('z Ava: ', zAv);
-// console.log('z ecart: ', zecart);
-// console.log('z delta: ', zdelta);
-// console.log('z prov: ', zProv);
-// console.log('z delta compensé: ', zdeltaComp);
-// console.log('coo z: ', cooZ);
-
-	fillTable();
-	displayResult();
 }
 function fillTable () {
 	table = document.createElement("table"),
@@ -595,42 +601,34 @@ function fillTable () {
 	};
 	Plotly.newPlot('chart3d', data, layout);
 }
-function fillCard() {
-	document.getElementById("hta").value = "Kat";
-	document.getElementById("ahg").value = "Kat";
-	document.getElementById("avg").value = "Kat";
-	document.getElementById("adg").value = "Kat";
-	document.getElementById("ahd").value = "Kat";
-	document.getElementById("avd").value = "Kat";
-	document.getElementById("add").value = "Kat";
-	document.getElementById("htb").value = "Kat";
-	document.getElementById("bhg").value = "Kat";
-	document.getElementById("bvg").value = "Kat";
-	document.getElementById("bdg").value = "Kat";
-	document.getElementById("bhd").value = "Kat";
-	document.getElementById("bvd").value = "Kat";
-	document.getElementById("bdd").value = "Kat";
-  }
 
-/* <thead>
-<tr>
-<th>#</th>
-<th>x</th>
-<th>y</th>
-<th>z</th>
-</tr>
-</thead>  */
+  $( "#linkSt" ).on( "click", "a", function(event) {
+	selected = parseInt($(event.target).attr('class'));
+	displayNumber.innerHTML = "Station n°"+(selected+1)+ " ▾";
+		if (selected >= (poly.length)) {
+		} else {
+			fillStation(selected);
+		}
+});
+function fillStation(num) {
+	let tempObject = poly[num];
+	document.getElementById('ahg').value = tempObject["horD1"];
+	document.getElementById('ahd').value = tempObject["horR1"];
+	document.getElementById('avg').value = tempObject["verD1"];
+	document.getElementById('avd').value = tempObject["verR1"];
+	document.getElementById('adg').value = tempObject["distoD1"];
+	document.getElementById('add').value = tempObject["distoR1"];
+	document.getElementById('bhg').value = tempObject["horD2"];
+	document.getElementById('bhd').value = tempObject["horR2"];
+	document.getElementById('bvg').value = tempObject["verD2"];
+	document.getElementById('bvd').value = tempObject["verR2"];
+	document.getElementById('bdg').value = tempObject["distoD2"];
+	document.getElementById('bdd').value = tempObject["distoR2"];
+	document.getElementById('ht').value = tempObject["hautid"];
+	document.getElementById('hta').value = tempObject["htA"];
+	document.getElementById('htb').value = tempObject["htB"];
 
-// document.getElementById("afficher").addEventListener("click", afficher);
-// function afficher(){
-// 	let i = parseInt(prompt("Please enter whiche one: "));
-// 	document.getElementById('ahg').innerHTML = poly[i-1].ahg;
-// 	alert(poly[i-1].ahg);
-// }
-// document.getElementById("afficher").addEventListener("click", pageDisplay);
-// function pageDisplay() {
-//   href="#display";
-// }
+}
 //Make the DIV element draggagle:
 // dragElement(document.getElementById("modal"));
 
