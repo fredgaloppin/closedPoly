@@ -9,23 +9,29 @@
     <!-- CSS Reset -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css">
     <link rel="stylesheet" href="assets/css/style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
   <div class="container">
         <header>
           <div id="mySidepanel" class="sidepanel">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+            <a href="#" class="closebtn" onclick="closeNav()">×</a>
             <div class="btn-group">
               <button>Manual</button>
               <button id="set">Set</button>
               <!-- Display: -->
-              <button id="displayStations">Stations</button>
+              <button id="reset">Reset</button>
               <button id="displayCalculs">Calcul</button>
             </div>
           </div>
           <button class="openbtn" onclick="openNav()">☰ </button>  
-          <span class = "highTitle" id="number">Station n°
-          </span>
+          <ul class="dropdown">
+              <span class = "highTitle">
+                <a href="#"  id="number" class="dropbtn">Station n° ▾</a>
+              <div id="linkSt" class="dropdown-content">
+              </div>
+            </span>
+            </ul>
           <p><b>ht. inst.:</b><input type="float" name="input" MAXLENGTH="4" id="ht" value="" size=2></p>
           <!-- <h3>Téophile</h3> -->
         </header>
