@@ -297,6 +297,21 @@ function displayStationCalcul(){
 	document.getElementById('mbd').innerHTML = roundTo(mbd,3);
 	document.getElementById('smr').innerHTML = roundTo(smr,4);
 }
+function emptyCalcul (){
+	document.getElementById('eah').innerHTML = "";
+	document.getElementById('eav').innerHTML = "";
+	document.getElementById('mah').innerHTML = "";
+	document.getElementById('mav').innerHTML = "";
+	document.getElementById('ead').innerHTML = "";
+	document.getElementById('mad').innerHTML = "";
+	document.getElementById('ebh').innerHTML = "";
+	document.getElementById('ebv').innerHTML = "";
+	document.getElementById('mbh').innerHTML = "";
+	document.getElementById('mbv').innerHTML = "";
+	document.getElementById('ebd').innerHTML = "";
+	document.getElementById('mbd').innerHTML = "";
+	document.getElementById('smr').innerHTML = "";
+}
 function validityGrade(x){
 	if (x < 0  || x > 400) {
 		return false
@@ -363,9 +378,8 @@ poly[selected] = statio;
 	if (selected === (poly.length)-1) {
 		displayStlist();
 		selected ++;
-	} else {
-		
-	}
+	} 
+	emptyCalcul ();
 }
 
 document.getElementById("calculpoly").addEventListener("click", calculpoly);
@@ -500,6 +514,7 @@ function calculpoly() {
 		}
 		fillTable();
 		displayResult();
+		bordel();
 	}
 }
 function fillTable () {
@@ -627,7 +642,30 @@ function fillStation(num) {
 	document.getElementById('ht').value = tempObject["hautid"];
 	document.getElementById('hta').value = tempObject["htA"];
 	document.getElementById('htb').value = tempObject["htB"];
+	displayStationCalcul();
+}
 
+function bordel (){
+	// console.log("dishorArr"+dishorArr);
+	// console.log("dishorAva"+dishorAva);
+	console.log("dishorEcar"+dishorEcar);
+	console.log("dishorMoy"+dishorMoy);
+	console.log("proportion"+proportion);
+	console.log("compAng"+compAng);
+	console.log("angleIntC"+angleIntC);
+	console.log("gis"+gis);
+	console.log("deltaX"+deltaX);
+	console.log("deltaY"+deltaY);
+	console.log("cooProvX"+cooProvX);
+	console.log("cooProvY"+cooProvY);
+	console.log("deltaCompX"+deltaCompX);
+	console.log("deltaCompY"+deltaCompY);
+	console.log("zAr"+zAr);
+	console.log("zAv"+zAv);
+	console.log("zecart"+zecart);
+	console.log("zdelta"+zdelta);
+	console.log("zProv"+zProv);
+	console.log("zdeltaComp"+zdeltaComp);
 }
 //Make the DIV element draggagle:
 // dragElement(document.getElementById("modal"));
