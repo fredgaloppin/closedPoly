@@ -1,9 +1,9 @@
 # Closed traverse
 closed Polygonal chain coo calcul theodolite
 
-↪  [Clic here](https://fredgaloppin.github.io/closedPoly/) 
+↪  [project:](https://fredgaloppin.github.io/closedPoly/) 
 
-↪  [closed traverse](https://dreamcivil.com/traversing-in-surveying/)
+↪  [What is a closed traverse](https://dreamcivil.com/traversing-in-surveying/)
    
    - each station target backsight and foresight station (Direct and Reverse), keep the tripods in place 
 
