@@ -1,4 +1,4 @@
-# Closed traverse
+# Closed traverse (clockwise)
 closed Polygonal chain coo calcul theodolite
 
 ↪  [project:](https://fredgaloppin.github.io/closedPoly/) 
