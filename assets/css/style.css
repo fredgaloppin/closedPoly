@@ -195,6 +195,10 @@ blockquote *:last-child {
   padding: 0.5rem;
 }
 
+#error {
+  color: red;
+}
+
 .button,
 button,
 input[type='button'],
