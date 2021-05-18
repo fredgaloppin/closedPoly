@@ -26,6 +26,6 @@ closed Polygonal chain coo calcul theodolite
 
 #### still to do
 
-- assuming no distance measurment over 500 meter, there'no (yet) earth sphericity correction    
+- assuming no distance measurement over 500 meter, there'no (yet) earth sphericity correction    
 - not yet complete calcul and station details to download     
 - code to be optimized, this is a training attempt, started with only javascript, html, css
