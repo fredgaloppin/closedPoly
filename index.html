@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="assets/img/compass-rose.png ">
     <title>Closed Polygonal</title>
     <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
     <!-- CSS Reset -->
@@ -17,11 +18,11 @@
           <div id="mySidepanel" class="sidepanel">
             <a href="#" class="closebtn" onclick="closeNav()">×</a>
             <div class="btn-group">
-              <button>Manual</button>
+              <!-- <button>Manual</button> -->
               <button id="set">Set</button>
               <!-- Display: -->
               <button id="reset">Reset</button>
-              <button id="displayCalculs">Calcul</button>
+              <!-- <button id="displayCalculs">Calcul</button> -->
             </div>
           </div>
           <button class="openbtn" onclick="openNav()">☰ </button>  
@@ -38,15 +39,16 @@
 <!-- <main> -->
         <div class="onDemand" id="onDemand" hidden>
             
-            <p>instrument stdDev &nbsp<input type="float" name="input" MAXLENGTH="3" id="stdDev" value="0.01" size=3></p>
-            <p>x Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="xInitial" value="500" size=6></p>
-            <p>y Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="yInitial" value="500" size=6></p>
-            <p>z Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="zInitial" value="400" size=6></p>
-            <p>bearing St 1-> St 2 &nbsp<input type="float" name="input" MAXLENGTH="8" id="bearing" value="100" size=6></p>
+            <p>instrument Ang. stdDev &nbsp<input type="float" name="input" MAXLENGTH="3" id="stdDev" value="0.01" size=3></p>
+            <p>instrument dis. stdDev mm &nbsp<input type="float" name="input" MAXLENGTH="1" id="stdDis" value="2" size=3></p>
+            <p>x Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="xInitial" value="500" size=7></p>
+            <p>y Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="yInitial" value="500" size=7></p>
+            <p>z Initial St 1 &nbsp<input type="float" name="input" MAXLENGTH="7" id="zInitial" value="400" size=7></p>
+            <p>bearing St 1-> St 2 &nbsp<input type="float" name="input" MAXLENGTH="8" id="bearing" value="100" size=7></p>
             <p><button id="submit">Submit</button></p>
         </div>
         <div class="row">
-            <div class="column targetBackSight">
+            <section class="column targetBackSight">
                 <!-- <h4></h4> -->
                 <p><span class ="title">Target Backsight</span> ht. instr.:<input type="float" name="input" MAXLENGTH="4" id="hta" value="" size=2></p>
                 <table  id="targetBackSight">
@@ -58,14 +60,14 @@
                     <tbody>
                       <tr>
                         <td>D</td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="ahg" value="" size=6></td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="avg" value="" size=6></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="ahg" value="" size=7></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="avg" value="" size=7></td>
                         <td><input type="float" name="input" MAXLENGTH="8" id="adg" value="" size=5></td>
                       </tr>
                       <tr>
                         <td>R</td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="ahd" value="" size=6></td>
-					            	<td><input type="float" name="input" MAXLENGTH="8" id="avd" value="" size=6></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="ahd" value="" size=7></td>
+					            	<td><input type="float" name="input" MAXLENGTH="8" id="avd" value="" size=7></td>
 						            <td><input type="float" name="input" MAXLENGTH="8" id="add" value="" size=5></td>
                       </tr>
                       <tr>
@@ -77,10 +79,10 @@
                     </tr>
                     </tbody>
                   </table>
-            </div>
+            </section>
         </div>
         <div class="row">
-            <div class="column targetForeSight">
+            <section class="column targetForeSight">
               <p><span class ="title">Target Foresight</span>ht. instr.:<input type="float" name="input" MAXLENGTH="4" id="htb" value="" size=2></p>
                 <table  id="targetForeSight">
                     <thead>
@@ -91,14 +93,14 @@
                     <tbody>
                       <tr>
                         <td>D</td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="bhg" value="" size=6></td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="bvg" value="" size=6></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="bhg" value="" size=7></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="bvg" value="" size=7></td>
                         <td><input type="float" name="input" MAXLENGTH="8" id="bdg" value="" size=5></td>
                       </tr>
                       <tr>
                         <td>R</td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="bhd" value="" size=6></td>
-                        <td><input type="float" name="input" MAXLENGTH="8" id="bvd" value="" size=6></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="bhd" value="" size=7></td>
+                        <td><input type="float" name="input" MAXLENGTH="8" id="bvd" value="" size=7></td>
                         <td><input type="float" name="input" MAXLENGTH="8" id="bdd" value="" size=5></td>
                       </tr>
                       <tr>
@@ -110,8 +112,7 @@
                       </tr>
                     </tbody>
                   </table>
-            </div>
-
+            </section>
         </div>
     <div class="row">
       <p class="highTitle">average: <span id="smr"></span></p>
@@ -137,6 +138,7 @@
               <div class="modal-content">
                 <legend>Polygonal <span class="close float-right">&times;</span> </legend>
                 <div id="displayCoo"></div>
+                <div id="error"></div>
                 <div id='chart3d'></div>
               </div>  
           </div>
@@ -145,6 +147,7 @@
   <!-- </main> -->
   </div>
   <script src="./assets/js/main.js"></script>
+  <!-- <script src="./assets/js/sketch.js"></script> -->
 </body>
 </html>
 
