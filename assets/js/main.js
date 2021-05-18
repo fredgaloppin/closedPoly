@@ -1,47 +1,7 @@
 
-// ------------function menu de boutons------------------------------------
-function openNav() {
-	document.getElementById("mySidepanel").style.width = "90px";
-}
-
-function closeNav() {
-	document.getElementById("mySidepanel").style.width = "0";
-}
-function openOnDemand(){
-	pop.hidden = false;
-}
-function closeOnDemand(){
-	pop.hidden = true;
-}
-//-------- modal script---------//
-           // Get the modal
-           let modal = document.getElementById("modal");
-           // Get the <span> element that closes the modal
-           let span = document.getElementsByClassName("close")[0];
-           // When the user clicks the button, open the modal 
-           function displayResult() {
-             modal.style.display = "block";
-           }
-           // When the user clicks on <span> (x), close the modal
-           span.onclick = function() {
-             modal.style.display = "none";
-			emptyContent("displayCoo");
-           }
-           // When the user clicks anywhere outside of the modal, close it
-           window.onclick = function(event) {
-             if (event.target == modal) {
-               modal.style.display = "none";
-			   emptyContent("displayCoo");
-             }
-           }
-        function emptyContent(idName) {
-			let content = document.getElementById(idName);
-				 while (content.hasChildNodes()) {
-					 content.removeChild(content.firstChild);
-					}
-		}
 //-arrays & variables    decla 
 	let poly = [];        // decla array holding stations
+    let calcSt = [];    // decla array  stations calc
 	// ------ array -- data,  stations bonded//
 		let pop = document.getElementById('onDemand');
 		let displayNumber = document.getElementById('number');
@@ -51,6 +11,7 @@ function closeOnDemand(){
 		let xInitial = 500;
 		let yInitial = 500;
 		let bearing = 100; // North celestial pole
+		let standardDist = 0.002;
 		let dishorArr = [];
 		let dishorAva = [];
 		let dishorEcar = [];
@@ -84,8 +45,8 @@ function closeOnDemand(){
 		let distoR1 = 0;
 		let horD2 = 0;
 		let horR2 = 0;
+		let verD2 = 0;
 		let verR2 = 0;
-		let verG2 = 0;
 		let distoD2 = 0;
 		let distoR2 = 0;
 		let hautid = 0;
@@ -105,11 +66,137 @@ function closeOnDemand(){
 		let mad = 0;
 		let mbd = 0;
 		let smr = 0;
+		let checkGap = ["eah", "ebh", "eav", "ebv", "ead", "ebd"]
+		let acceptanceMessage = "Out of acceptance: ";
+		let error = false;
 // end decla
 
 
 resetData();
-
+//test instance:
+poly = [
+	{
+		hautid: 1.62,
+		htA: 1.589,
+		htB: 1.562,
+		horD1: 325.4110,
+		horR1: 125.4065,
+		verD1: 105.2735,
+		verR1: 294.7275,
+		distoD1: 25.917,
+		distoR1: 25.917,
+		horD2: 48.2315,
+		horR2: 248.2285,
+		verD2: 100.0585,
+		verR2: 299.9415,
+		distoD2: 23.076,
+		distoR2: 23.075,
+	  },
+	  {
+		hautid: 1.562,
+		htA: 1.62,
+		htB: 1.574,
+		horD1: 6.0355,
+		horR1: 206.0315,
+		verD1: 99.946,
+		verR1: 300.057,
+		distoD1: 23.076,
+		distoR1: 23.076,
+		horD2: 312.2810,
+		horR2: 112.2765,
+		verD2: 93.8325,
+		verR2: 306.1685,
+		distoD2: 35.516,
+		distoR2: 35.516,
+	  },
+	  {
+		hautid: 1.574,
+		htA: 1.562,
+		htB: 1.399,
+		horD1: 357.178,
+		horR1: 157.1735,
+		verD1: 106.1685,
+		verR1: 293.833,
+		distoD1: 35.517,
+		distoR1: 35.516,
+		horD2: 199.2365,
+		horR2: 399.233,
+		verD2: 84.595,
+		verR2: 315.4055,
+		distoD2: 17.942,
+		distoR2: 17.942,
+	  },
+	  {
+		hautid: 1.399,
+		htA: 1.574,
+		htB: 1.695,
+		horD1: 220.2815,
+		horR1: 20.2795,
+		verD1: 115.4015,
+		verR1: 284.6005,
+		distoD1: 17.942,
+		distoR1: 17.942,
+		horD2: 122.0405,
+		horR2: 322.035,
+		verD2: 102.072,
+		verR2: 297.9285,
+		distoD2: 92.188,
+		distoR2: 92.187,
+	  },
+	  {
+		hautid: 1.695,
+		htA: 1.399,
+		htB: 1.557,
+		horD1: 191.2895,
+		horR1: 391.2855,
+		verD1: 97.93,
+		verR1: 302.073,
+		distoD1: 92.186,
+		distoR1: 92.186,
+		horD2: 56.5055,
+		horR2: 256.5025,
+		verD2: 110.8335,
+		verR2: 289.17,
+		distoD2: 30.637,
+		distoR2: 30.636,
+	  },
+	  {
+		hautid: 1.557,
+		htA: 1.695,
+		htB: 1.605,
+		horD1: 390.0765,
+		horR1: 190.0725,
+		verD1: 89.1695,
+		verR1: 310.832,
+		distoD1: 30.637,
+		distoR1: 30.636,
+		horD2: 306.6495,
+		horR2: 106.6455,
+		verD2: 102.2395,
+		verR2: 297.761,
+		distoD2: 47.005,
+		distoR2: 47.004,
+	  },
+	  {
+		hautid: 1.605,
+		htA: 1.557,
+		htB: 1.63,
+		horD1: 84.44,
+		horR1: 284.4355,
+		verD1: 97.755,
+		verR1: 302.246,
+		distoD1: 47.004,
+		distoR1: 47.003,
+		horD2: 329.7625,
+		horR2: 129.758,
+		verD2: 94.7345,
+		verR2: 305.268,
+		distoD2: 25.916,
+		distoR2: 25.915,
+	  },
+]
+// end test instance
+displayStlist();
 function displayStlist() {
 	emptyContent("linkSt");
 		for (let index = 0; index < poly.length; index++) {
@@ -127,9 +214,10 @@ function displayStlist() {
 		linkSt.appendChild(lastA);
 		displayNumber.innerHTML = "Station n°"+((poly.length) + 1)+ " ▾";
 	}
-	document.getElementById("reset").addEventListener("click", resetData);
+document.getElementById("reset").addEventListener("click", resetData);
 function resetData () {
 	poly = [];
+    calcSt = [];
 	dishorArr = [];
 	dishorAva = [];
 	dishorEcar = [];
@@ -154,9 +242,64 @@ function resetData () {
 	zdeltaComp = [];
 	cooZ = [];
 	selected = 0;
+	acceptanceMessage = "Out of acceptance: ";
 	displayStlist();
 }
 // calcul function
+function calc() {
+	acceptanceMessage = "Out of acceptance: ";
+	for (let index = 0; index < checkGap.length; index++) {
+		let temp = checkGap[index];
+		document.getElementById(temp).style.color =  "#f4f5f6";
+	}
+
+	mah = roundTo(averHor(horD1,horR1),5);
+	mbh = roundTo(averHor(horD2,horR2),5);
+	eah = roundTo(gapHor(horD1,horR1),4);
+	if (eah > (2.5*Math.sqrt(1)*Math.sqrt(2)*standardDevAng)) {
+		acceptanceMessage += "\n"+"gap hor Backsight: "+ eah+"\n";
+		error = true;
+		document.getElementById("eah").style.color =  "red";
+	}
+	ebh = roundTo(gapHor(horD2,horR2),4);
+	if (ebh > (2.5*Math.sqrt(1)*Math.sqrt(2)*standardDevAng)) {
+		acceptanceMessage += "gap hor Foresight: "+ ebh+"\n";
+		error = true;
+		document.getElementById("ebh").style.color =  "red";
+	}
+	mav = roundTo(averVer (verD1,verR1),5);
+	mbv = roundTo(averVer (verD2,verR2),5);
+	eav = roundTo(gapVer (verD1,verR1),4);
+	if (eav > (2.5*Math.sqrt(1)*Math.sqrt(2)*standardDevAng)) {
+		acceptanceMessage += "gap hor Backsight: "+ eav+"\n";
+		error = true;
+		document.getElementById("eav").style.color =  "red";
+	}
+	ebv = roundTo(gapVer (verD2,verR2),4);
+	if (ebv > (2.5*Math.sqrt(1)*Math.sqrt(2)*standardDevAng)) {
+		acceptanceMessage += "gap hor Foresight: "+ ebv+"\n";
+		error = true;
+		document.getElementById("ebv").style.color =  "red";
+	}
+	ead = roundTo(gapDis(distoD1,distoR1),3);
+	if (ead > standardDist) {
+		acceptanceMessage += "gap distance Backsight: "+ ead+"\n";
+		error = true;
+		document.getElementById("ead").style.color =  "red";
+	}
+	ebd = roundTo(gapDis(distoD2,distoR2),3);
+	if (ebd > standardDist) {
+		acceptanceMessage += "gap distance Foresight: "+ ebd;
+		error = true;
+		document.getElementById("ebd").style.color =  "red";
+	}
+	mad = roundTo(averDis (distoD1,distoR1),4);
+	mbd = roundTo(averDis (distoD2,distoR2),4);
+	smr = roundTo(averRed (mah,mbh),5);
+	if (error == true) {
+		alert(acceptanceMessage);
+	}
+}
 
 function averHor(x,y) {
 	if (x == 0) {
@@ -196,16 +339,41 @@ function gapDis(x,y) {
 function averDis(x,y) {
 	return (x+y)/2
 }
-function roundTo(value, places){
-	let power = Math.pow(10, places);
-	return Math.round(value * power) / power;
-}
 function averRed(x,y) {
 	if (y-x<0) {
 		return y-x+400
 	} else {
 		return y-x
 	}
+}
+function validityGrade(x){
+	if (x < 0  || x > 400) {
+		return false
+	} else {
+		return true
+	}
+}
+function validityEDMI(x){
+	// if (x > 500) {
+	// 	calcul correction earth curve
+	// }
+	if (x <= 0) {
+		return false
+	} else {
+		return true
+	}
+}
+function validityHeight(x) {
+	if (x < 1 || x > 2 ) {
+		return false
+	} else {
+		return true
+	}
+}
+// end basic calc
+function roundTo(value, places){
+	let power = Math.pow(10, places);
+	return Math.round(value * power) / power;
 }
 function setDisplay(){
 	closeNav();
@@ -216,10 +384,40 @@ function setDatum(){
 	zInitial = parseFloat(document.getElementById("zInitial").value);
 	xInitial = parseFloat(document.getElementById("xInitial").value);
 	yInitial = parseFloat(document.getElementById("yInitial").value);
+	standardDist = (parseFloat(document.getElementById("stdDis").value))/1000;
 	bearing = parseFloat(document.getElementById("bearing").value);
+	resetExceptPoly();
 	closeOnDemand();
 }
+function resetExceptPoly (){
+	calcSt = [];
+	dishorArr = [];
+	dishorAva = [];
+	dishorEcar = [];
+	dishorMoy = [];
+	proportion = [];
+	compAng = [];
+	angleIntC = [];
+	gis = []; 
+	deltaX = [];
+	deltaY = [];
+	cooProvX = [];
+	cooProvY = [];
+	deltaCompX = [];
+	deltaCompY = [];
+	cooX = [];
+	cooY = [];
+	zAr = [];
+	zAv = [];
+	zecart = [];
+	zdelta = [];
+	zProv = [];
+	zdeltaComp = [];
+	cooZ = [];
+	acceptanceMessage = "acceptance matter: ";
+}
 document.getElementById("submit").addEventListener("click", setDatum);
+// get values
 function getValueGrade(x){
 	let temp = 0;
 	temp = parseFloat(document.getElementById(x).value);
@@ -264,22 +462,21 @@ function getValues() {
 	htA = getValueHeight("hta");
 	htB = getValueHeight("htb");
 }
-function calc() {
-
-	mah = averHor(horD1,horR1);
-	mbh = averHor(horD2,horR2);
-	eah = gapHor(horD1,horR1);
-	ebh = gapHor(horD2,horR2);
-	mav = averVer (verD1,verR1);
-	mbv = averVer (verD2,verR2);
-	eav = gapVer (verD1,verR1);
-	ebv = gapVer (verD2,verR2);
-	ead = gapDis (distoD1,distoR1);
-	ebd = gapDis (distoD2,distoR2);
-	mad = averDis (distoD1,distoR1);
-	mbd = averDis (distoD2,distoR2);
-	smr = averRed (mah,mbh);
+function getStatValues(el) {
+	horD1 = poly[el].horD1; //  1 for foresight and 2 for backsight, D=Direct, R=reverse
+	horR1 = poly[el].horR1;
+	verD1 = poly[el].verD1;
+	verR1 = poly[el].verR1;
+	distoD1 = poly[el].distoD1;
+	distoR1 = poly[el].distoR1;
+	horD2 = poly[el].horD2;
+	horR2 = poly[el].horR2;
+	verD2 = poly[el].verD2;
+	verR2 = poly[el].verR2;
+	distoD2 = poly[el].distoD2;
+	distoR2 = poly[el].distoR2;
 }
+
 function displayStationCalcul(){
 	getValues();
 	calc();
@@ -312,37 +509,12 @@ function emptyCalcul (){
 	document.getElementById('mbd').innerHTML = "";
 	document.getElementById('smr').innerHTML = "";
 }
-function validityGrade(x){
-	if (x < 0  || x > 400) {
-		return false
-	} else {
-		return true
-	}
-}
-function validityEDMI(x){
-	// if (x > 500) {
-	// 	calcul correction earth curve
-	// }
-	if (x <= 0) {
-		return false
-	} else {
-		return true
-	}
-}
-function validityHeight(x) {
-	if (x < 1 || x > 2 ) {
-		return false
-	} else {
-		return true
-	}
-}
+// calcul check before record if you wish to:
 document.getElementById("calc").addEventListener("click", displayStationCalcul);
-// fonction calcul pour éventuellement vérifier une station avant d'enregistrer:
 document.getElementById("set").addEventListener("click", setDisplay);
 document.getElementById("record").addEventListener("click", record);
 function record() {
-	getValues();
-	calc();
+	displayStationCalcul();
 let statio = {
 	hautid: hautid,
 	htA: htA,
@@ -359,19 +531,6 @@ let statio = {
 	horR2: horR2,
 	distoD2: distoD2,
 	distoR2: distoR2,
-	eav: eav,
-	eah: eah,
-	ead: ead,
-	mah: mah,
-	mav: mav,
-	mad: mad,
-	ebh: ebh,
-	ebv: ebv,
-	ebd: ebd,
-	mbh: mbh,
-	mbv: mbv,
-	mbd: mbd,
-	smr: smr,
   };
 poly[selected] = statio;
 	alert("You have recorded station: " +(parseInt(selected)+1));
@@ -379,35 +538,64 @@ poly[selected] = statio;
 		displayStlist();
 		selected ++;
 	} 
-	emptyCalcul ();
+	// emptyCalcul ();
 }
 
 document.getElementById("calculpoly").addEventListener("click", calculpoly);
 function calculpoly() {
-	if (poly.length == 0) {
-		alert("no stations recorded yet");
-		} else {
+	acceptanceMessage = "Out of acceptance: ";
+	if (poly.length === 0) {
+		alert("no stations recorded!")
+	} else {
+		resetExceptPoly();
+		let num = (poly.length) - 1
+        for(let i = 0; i < poly.length; i++){
+            getStatValues(i);
+            calc();
+            let calculSt = {
+            eav: eav,
+            eah: eah,
+            ead: ead,
+            mah: mah,
+            mav: mav,
+            mad: mad,
+            ebh: ebh,
+            ebv: ebv,
+            ebd: ebd,
+            mbh: mbh,
+            mbv: mbv,
+            mbd: mbd,
+            smr: smr,
+            };
+            calcSt[i] = calculSt;
+        }
+		// distance plani
 		for(let i = 0; i < poly.length; i++){
-			let num = (poly.length) - 1
-			if (i==0) {
-				let r = ((poly[num].mbv)/200)*(Math.PI);
-				dishorArr.push(Math.sin(r)*poly[num].mbd);
-				let s = ((poly[i].mav)/200)*(Math.PI);
-				dishorAva.push(Math.sin(s)*poly[i].mad);
+			if (i == 0) {
+				let r = ((calcSt[num].mbv)/200)*(Math.PI);
+				dishorArr.push(Math.sin(r)*calcSt[num].mbd);
+				let s = ((calcSt[i].mav)/200)*(Math.PI);
+				dishorAva.push(Math.sin(s)*calcSt[i].mad);
+				dishorMoy[num] = ((dishorArr[i]+dishorAva[i])/2);
 			} else {
-				let r = ((poly[i-1].mbv)/200)*(Math.PI);
-				dishorArr.push(Math.sin(r)*poly[i-1].mbd);
-				let s = ((poly[i].mav)/200)*(Math.PI);
-				dishorAva.push(Math.sin(s)*poly[i].mad);
+				let r = ((calcSt[i-1].mbv)/200)*(Math.PI);
+				dishorArr.push(Math.sin(r)*calcSt[i-1].mbd);
+				let s = ((calcSt[i].mav)/200)*(Math.PI);
+				dishorAva.push(Math.sin(s)*calcSt[i].mad);
+				dishorMoy[i-1] = ((dishorArr[i]+dishorAva[i])/2);			
+			}
+			if ((Math.abs(dishorArr[i]-dishorAva[i])) > standardDist) {
+				acceptanceMessage += "gap distance: st "+ [i]+" & st "+ [i+1]+ ": "+roundTo((Math.abs(dishorArr[i]-dishorAva[i])),4)+ "\n";
+				error = true;
 			}
 			dishorEcar.push(Math.abs(1000*(dishorArr[i]-dishorAva[i])));
-			dishorMoy.push((dishorArr[i]+dishorAva[i])/2);
+			
 		}
 		let totalMdist = dishorMoy.reduce((a, b) => {
 			return a + b;
 		});
+		// each line/ total distances
 		for(let i = 0; i < poly.length; i++){
-			let num = (poly.length) - 1
 			if (i==0) {
 				proportion.push(100*((1/dishorMoy[num])+(1/dishorMoy[1])));
 			} else {
@@ -420,33 +608,41 @@ function calculpoly() {
 		let totaldist = dishorMoy.reduce((a, b) => {
 			return a + b;
 		});
-		let totalAngleInterne = poly.reduce(function(a, b){
+		let totalAngleInterne = calcSt.reduce(function(a, b){
 			return a + b.smr;
 		},0);
 		let angleTheorique = 200*(poly.length -2);
 		let fermetureAngulaire = angleTheorique-totalAngleInterne;
+		if (fermetureAngulaire > (2.5*Math.sqrt(poly.length)*Math.sqrt(2)*standardDevAng)) {
+			error = true;
+			acceptanceMessage += "angular closure error" + roundTo(fermetureAngulaire,4)+"\n";
+		}
+		// compensation angles
 		for(let i = 0; i < poly.length; i++){
 				compAng.push(fermetureAngulaire/totalP*proportion[i]);
-				angleIntC.push(compAng[i]+poly[i].smr);
+				angleIntC.push(compAng[i]+calcSt[i].smr);
 		}
 		let totalAngleComp = angleIntC.reduce((a, b) => {
 			return a + b;
 		});
+		// calcul bearing
 		for(let i = 0; i < poly.length; i++){
 			if (i==0) {
 				gis.push(bearing);
 			} else {
-				if (gis[i-1]+poly[i].smr+200<400) {
-					gis.push(gis[i-1]+poly[i].smr+200);
+				if (gis[i-1]+calcSt[i].smr+200<400) {
+					gis.push(gis[i-1]+calcSt[i].smr+200);
 				} else {
-					gis.push(gis[i-1]+poly[i].smr-200);
+					gis.push(gis[i-1]+calcSt[i].smr-200);
 				}
 			}
 		}
+		// delta x & y  before compensation
 		for(let i = 0; i < poly.length; i++){
 			deltaX.push(dishorMoy[i]*Math.sin(gis[i]/200*Math.PI));
 			deltaY.push(dishorMoy[i]*Math.cos(gis[i]/200*Math.PI));
 		}
+		// intermediates coo x & y
 		for(let i = 0; i < poly.length + 1; i++){
 			if (i==0) {
 				cooProvX.push(xInitial);
@@ -456,12 +652,24 @@ function calculpoly() {
 				cooProvY.push(cooProvY[i-1]+deltaY[i-1]);
 			}
 		}
-		let fermeturePlaniProvX = 100*(cooProvX[0]-cooProvX[cooProvX.length - 1]);
-		let fermeturePlaniProvY = 100*(cooProvY[0]-cooProvY[cooProvY.length - 1]);
-		for(let i = 0; i < poly.length; i++){
-			deltaCompX.push((fermeturePlaniProvX/100)/totalMdist*dishorMoy[i]+deltaX[i]);
-			deltaCompY.push((fermeturePlaniProvY/100)/totalMdist*dishorMoy[i]+deltaY[i]);
+		let fermeturePlaniProvX = (cooProvX[0]-cooProvX[cooProvX.length - 1]);
+		if (fermeturePlaniProvX > (2.7*standardDist*Math.sqrt(poly.length))) {
+			acceptanceMessage += "linearX closure error: "+ roundTo(fermeturePlaniProvX,4) +"\n";
+			error = true;
+			// document.getElementById("ead").style.color =  "red";
 		}
+		let fermeturePlaniProvY = (cooProvY[0]-cooProvY[cooProvY.length - 1]);
+		if (fermeturePlaniProvY > (2.7*standardDist*Math.sqrt(poly.length))) {
+			acceptanceMessage += "linearY closure error: "+ roundTo(fermeturePlaniProvY,4) +"\n";
+			error = true;
+			// document.getElementById("ead").style.color =  "red";
+		}
+		// delta x & y with compensation
+		for(let i = 0; i < poly.length; i++){
+			deltaCompX.push((fermeturePlaniProvX)/totalMdist*dishorMoy[i]+deltaX[i]);
+			deltaCompY.push((fermeturePlaniProvY)/totalMdist*dishorMoy[i]+deltaY[i]);
+		}
+		// coo x & y
 		for(let i = 0; i < poly.length + 1; i++){
 			if (i==0) {
 				cooX.push(xInitial);
@@ -474,37 +682,61 @@ function calculpoly() {
 		let fermeturePlaniX = 1000*(cooX[0]-cooX[poly.length]);
 		let fermeturePlaniY = 1000*(cooY[0]-cooY[poly.length]);
 		// Altitude --------------------------------------------------------------------
+		// delta z before compensation
 		for(let i = 0; i < poly.length; i++){
-			let num = (poly.length) - 1
 			if (i==0) {
-				let r = ((poly[num].mbv)/200)*(Math.PI);
-				zAr.push(Math.cos(r)*poly[num].mbd + poly[num].hautid - poly[num].htB);
-				let s = ((poly[i].mav)/200)*(Math.PI);
-				zAv.push(Math.cos(s)*poly[i].mad + poly[i].hautid - poly[i].htA);
+				let r = ((calcSt[num].mbv)/200)*(Math.PI);
+				let rAr = (Math.cos(r)*calcSt[num].mbd + poly[num].hautid - poly[num].htB);
+				zAr[num] = rAr;
+				let s = ((calcSt[0].mav)/200)*(Math.PI);
+				let sAv = (Math.cos(s)*calcSt[0].mad + poly[0].hautid - poly[0].htA);
+				zAv[num]= sAv;
+				if (Math.abs((Math.abs(rAr)-Math.abs(sAv))) > 0.005) {
+					acceptanceMessage += "gap z: st "+ 1 +" & st "+ [num] + ": " + roundTo((Math.abs((Math.abs(rAr)-Math.abs(sAv)))),4)+ "\n";
+					error = true;
+				}
+				if (rAr>sAv){
+					zdelta[num] = ((Math.abs(rAr)+Math.abs(sAv))/2);
+				} else {
+					zdelta[num] = (-(Math.abs(rAr)+Math.abs(sAv))/2);
+				}
 			} else {
-				let r = ((poly[i-1].mbv)/200)*(Math.PI);
-				zAr.push(Math.cos(r)*poly[i-1].mbd + poly[i-1].hautid - poly[i-1].htB);
-				let s = ((poly[i].mav)/200)*(Math.PI);
-				zAv.push(Math.cos(s)*poly[i].mad  + poly[i].hautid - poly[i].htA);
-			}
-			zecart.push(1000*(Math.abs(zAr[i])-Math.abs(zAv[i])));
-			if (zAr>zAv) {
-				zdelta.push((Math.abs(zAr[i])+Math.abs(zAv[i]))/2);
-			} else {
-				zdelta.push(-(Math.abs(zAr[i])+Math.abs(zAv[i]))/2);			
+				let r = ((calcSt[i-1].mbv)/200)*(Math.PI);
+				let rAr = (Math.cos(r)*calcSt[i-1].mbd + poly[i-1].hautid - poly[i-1].htB);
+				zAr[i-1] = rAr;
+				let s = ((calcSt[i].mav)/200)*(Math.PI);
+				let sAv = (Math.cos(s)*calcSt[i].mad  + poly[i].hautid - poly[i].htA);
+				zAv[i-1] = sAv;
+				if (Math.abs((Math.abs(rAr)-Math.abs(sAv))) > 0.005) {
+					acceptanceMessage += "gap z: st "+ [i] +" & st "+ [i+1] + ": " + roundTo((Math.abs((Math.abs(rAr)-Math.abs(sAv)))),4)+ "\n";
+					error = true;
+				}
+				if (rAr>sAv) {
+					zdelta[i-1] = ((Math.abs(rAr)+Math.abs(sAv))/2);
+				} else {
+					zdelta[i-1] = (-(Math.abs(rAr)+Math.abs(sAv))/2);			
+				}
 			}
 		}
+		// intermediate cco z
 		for(let i = 0; i < poly.length + 1; i++){
 			if (i==0) {
-				zProv.push(400);
+				zProv.push(zInitial);
 			} else {
 				zProv.push(zProv[i-1]+zdelta[i-1]);
 			}
 		}
-		let fermetureProvZ = 1000*(zProv[0]-zProv[poly.length]);
-		for(let i = 0; i < poly.length; i++){
-			zdeltaComp.push(zdelta[i]+(fermetureProvZ/1000)*dishorMoy[i]/totalMdist)
+		let toleranceZ = 2.5*0.005*Math.sqrt(poly.length);
+		let fermetureProvZ = (zProv[0]-zProv[poly.length]);
+		if ((Math.abs(fermetureProvZ)) > toleranceZ) {
+			acceptanceMessage += "closure z: "+ roundTo((Math.abs(fermetureProvZ)),4)+ "\n";
+			error = true;
 		}
+		// delta z with compensation
+		for(let i = 0; i < poly.length; i++){
+			zdeltaComp.push(zdelta[i]+(fermetureProvZ)*dishorMoy[i]/totalMdist)
+		}
+		// coo z
 		for(let i = 0; i < poly.length + 1; i++){
 			if (i==0) {
 				cooZ.push(zInitial);
@@ -514,11 +746,11 @@ function calculpoly() {
 		}
 		fillTable();
 		displayResult();
-		bordel();
 	}
 }
 function fillTable () {
 	table = document.createElement("table"),
+	table.setAttribute("id","displayTable")
     row = table.insertRow();
 	let cell1 = row.insertCell();
 	cell1.innerHTML = '#';
@@ -538,22 +770,51 @@ function fillTable () {
 					break;
 					case 1:
 						let cell6 = row.insertCell();
-						cell6.innerHTML = roundTo(cooX[i],2);
+						cell6.innerHTML = roundTo(cooX[i],3);
 					break;
 					case 2:
 						let cell7 = row.insertCell();
-						cell7.innerHTML = roundTo(cooY[i],2);
+						cell7.innerHTML = roundTo(cooY[i],3);
 					break;
 					case 3:
 						let cell8 = row.insertCell();
-						cell8.innerHTML = roundTo(cooZ[i],2);
+						cell8.innerHTML = roundTo(cooZ[i],3);
 					break;
 				  	default:
 					break;
 			  }  
 		  }
 	}
+	csvButton = document.createElement("button");
+	let textButton = document.createTextNode("Download csv");
+	csvButton.appendChild(textButton);
+	csvButton.setAttribute("onclick", "exportTableToCSV(null,'coo.csv')");
+	if (error == true) {
+		alarm = document.createElement("p");
+		let textAlert = document.createTextNode(acceptanceMessage);
+		alarm.appendChild(textAlert);
+		document.getElementById("error").appendChild(alarm);
+	}
 	document.getElementById("displayCoo").appendChild(table);
+	document.getElementById("displayCoo").appendChild(csvButton);
+	let spanX = Math.max(...cooX)-Math.min(...cooX);
+	let spanY = Math.max(...cooY)-Math.min(...cooY);
+	let begX = 0;
+	let endX = 0;
+	let begY = 0;
+	let endY = 0;
+	let spanGap = Math.abs(spanX-spanY)/2+5;
+	if (spanX>spanY) {
+		begX = Math.min(...cooX)-5;
+		endX = Math.max(...cooX)+5;
+		begY = Math.min(...cooY)-spanGap;
+		endY = Math.min(...cooY)+spanY+spanGap;
+	} else {
+		begY = Math.min(...cooY)-5;
+		endY = Math.max(...cooY)+5;
+		begX = Math.min(...cooX)-spanGap;
+		endX = Math.min(...cooX)+spanX+spanGap;
+	}
 	let data=[
 		{
 			opacity:0.8,
@@ -582,7 +843,7 @@ function fillTable () {
 			 spikethickness: 3,
 			 mirror : "none",
 			 title : "x",
-			 range: [Math.min(...cooX)-5, Math.max(...cooX)+5],
+			 range: [begX, endX],
 			 color: '#a16423f2',
 			   },
 		   yaxis: {
@@ -590,7 +851,7 @@ function fillTable () {
 			 spikesides: false,
 			 spikethickness: 3,
 			 title : "y",
-			 range: [Math.min(...cooY)-5, Math.max(...cooY)+5],
+			 range: [begY, endY],
 			  },
 		   zaxis: {
 			 spikecolor: '#1fe5bd',
@@ -616,7 +877,7 @@ function fillTable () {
 	};
 	Plotly.newPlot('chart3d', data, layout);
 }
-
+// display selected station
   $( "#linkSt" ).on( "click", "a", function(event) {
 	selected = parseInt($(event.target).attr('class'));
 	displayNumber.innerHTML = "Station n°"+(selected+1)+ " ▾";
@@ -645,68 +906,77 @@ function fillStation(num) {
 	displayStationCalcul();
 }
 
-function bordel (){
-	// console.log("dishorArr"+dishorArr);
-	// console.log("dishorAva"+dishorAva);
-	console.log("dishorEcar"+dishorEcar);
-	console.log("dishorMoy"+dishorMoy);
-	console.log("proportion"+proportion);
-	console.log("compAng"+compAng);
-	console.log("angleIntC"+angleIntC);
-	console.log("gis"+gis);
-	console.log("deltaX"+deltaX);
-	console.log("deltaY"+deltaY);
-	console.log("cooProvX"+cooProvX);
-	console.log("cooProvY"+cooProvY);
-	console.log("deltaCompX"+deltaCompX);
-	console.log("deltaCompY"+deltaCompY);
-	console.log("zAr"+zAr);
-	console.log("zAv"+zAv);
-	console.log("zecart"+zecart);
-	console.log("zdelta"+zdelta);
-	console.log("zProv"+zProv);
-	console.log("zdeltaComp"+zdeltaComp);
+function exportTableToCSV(html, filename) {
+	var csv = [];
+	let rows = document.querySelectorAll('#displayTable tr');
+    for(var i = 0; i < rows.length; i++){
+		var row = [], 
+		cols = rows[i].querySelectorAll("td, th");
+        for(var j = 0; j < cols.length; j++){
+			row.push(cols[j].innerText);
+        }
+		csv.push(row.join(","));
+    }
+    // download csv file
+    downloadCSV(csv.join("\n"), filename);
 }
-//Make the DIV element draggagle:
-// dragElement(document.getElementById("modal"));
 
-// function dragElement(elmnt) {
-//   var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-//   if (document.getElementById("modal-content")) {
-//     /* if present, the header is where you move the DIV from:*/
-//     document.getElementById("modal-content").onmousedown = dragMouseDown;
-//   } else {
-//     /* otherwise, move the DIV from anywhere inside the DIV:*/
-//     elmnt.onmousedown = dragMouseDown;
-//   }
+function downloadCSV(csv, filename) {
+	var csvFile;
+    var downloadLink;
+	
+	if (window.Blob == undefined || window.URL == undefined || window.URL.createObjectURL == undefined) {
+		alert("Your browser doesn't support Blobs");
+		return;
+	}
+	
+    csvFile = new Blob([csv], {type:"text/csv"});
+    downloadLink = document.createElement("a");
+    downloadLink.download = filename;
+    downloadLink.href = window.URL.createObjectURL(csvFile);
+    downloadLink.style.display = "none";
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+}
 
-//   function dragMouseDown(e) {
-//     e = e || window.event;
-//     e.preventDefault();
-//     // get the mouse cursor position at startup:
-//     pos3 = e.clientX;
-//     pos4 = e.clientY;
-//     document.onmouseup = closeDragElement;
-//     // call a function whenever the cursor moves:
-//     document.onmousemove = elementDrag;
-//   }
+// ------------function menu de boutons------------------------------------
+function openNav() {
+	document.getElementById("mySidepanel").style.width = "90px";
+}
 
-//   function elementDrag(e) {
-//     e = e || window.event;
-//     e.preventDefault();
-//     // calculate the new cursor position:
-//     pos1 = pos3 - e.clientX;
-//     pos2 = pos4 - e.clientY;
-//     pos3 = e.clientX;
-//     pos4 = e.clientY;
-//     // set the element's new position:
-//     elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-//     elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-//   }
-
-//   function closeDragElement() {
-//     /* stop moving when mouse button is released:*/
-//     document.onmouseup = null;
-//     document.onmousemove = null;
-//   }
-// }
+function closeNav() {
+	document.getElementById("mySidepanel").style.width = "0";
+}
+function openOnDemand(){
+	pop.hidden = false;
+}
+function closeOnDemand(){
+	pop.hidden = true;
+}
+//-------- modal script---------//
+// Get the modal
+let modal = document.getElementById("modal");
+// Get the <span> element that closes the modal
+let span = document.getElementsByClassName("close")[0];
+// When the user clicks the button, open the modal 
+function displayResult() {
+	modal.style.display = "block";
+}
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+	modal.style.display = "none";
+	emptyContent("displayCoo");
+}
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+	if (event.target == modal) {
+		modal.style.display = "none";
+		emptyContent("displayCoo");
+	}
+}
+function emptyContent(idName) {
+	let content = document.getElementById(idName);
+	while (content.hasChildNodes()) {
+		content.removeChild(content.firstChild);
+	}
+} 
