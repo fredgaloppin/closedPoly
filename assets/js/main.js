@@ -247,6 +247,7 @@ function resetData () {
 }
 // calcul function
 function calc() {
+	error = false;
 	acceptanceMessage = "Out of acceptance: ";
 	for (let index = 0; index < checkGap.length; index++) {
 		let temp = checkGap[index];
