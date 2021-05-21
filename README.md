@@ -17,7 +17,7 @@ closed Polygonal chain coo calcul theodolite
 - You can change the "Set": initial x, y, z of the first station & angular standard deviation & distance st dev    
 - Reset: erase all data   
 - A first closed traverse is given in instance when you open; Reset to start your own   
-- You can choose the next station to record (not yet recorded in the list)  
+- You can choose the next station to record in the list (not yet recorded )  
 - 1: compensations are made according to gap between theorical polygonal closure and measured one in proportion with each couple of lengths beside their angle   
 -  bearing calcul & x et y calculs    
 - 2: compensations are made on x & y linear closure
