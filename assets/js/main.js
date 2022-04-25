@@ -545,8 +545,8 @@ poly[selected] = statio;
 document.getElementById("calculpoly").addEventListener("click", calculpoly);
 function calculpoly() {
 	acceptanceMessage = "Out of acceptance: ";
-	if (poly.length === 0) {
-		alert("no stations recorded!")
+	if (poly.length <= 2) {
+		alert("At least 3 stations recorded required!")
 	} else {
 		resetExceptPoly();
 		let num = (poly.length) - 1
