@@ -244,6 +244,7 @@ function resetData () {
 	selected = 0;
 	acceptanceMessage = "Out of acceptance: ";
 	displayStlist();
+	emptyNoteBook ();
 }
 // calcul function
 function calc() {
@@ -509,6 +510,24 @@ function emptyCalcul (){
 	document.getElementById('ebd').innerHTML = "";
 	document.getElementById('mbd').innerHTML = "";
 	document.getElementById('smr').innerHTML = "";
+}
+function emptyNoteBook (){
+	document.getElementById('ahg').value = "";
+	document.getElementById('ahd').value = "";
+	document.getElementById('avg').value = "";
+	document.getElementById('avd').value = "";
+	document.getElementById('adg').value = "";
+	document.getElementById('add').value = "";
+	document.getElementById('bhg').value = "";
+	document.getElementById('bhd').value = "";
+	document.getElementById('bvg').value = "";
+	document.getElementById('bvd').value = "";
+	document.getElementById('bdg').value = "";
+	document.getElementById('bdd').value = "";
+	document.getElementById('ht').value = "";
+	document.getElementById('hta').value = "";
+	document.getElementById('htb').value = "";
+	emptyCalcul();
 }
 // calcul check before record if you wish to:
 document.getElementById("calc").addEventListener("click", displayStationCalcul);
@@ -882,7 +901,8 @@ function fillTable () {
   $( "#linkSt" ).on( "click", "a", function(event) {
 	selected = parseInt($(event.target).attr('class'));
 	displayNumber.innerHTML = "Station n°"+(selected+1)+ " ▾";
-		if (selected >= (poly.length)) {
+		if (selected === (poly.length)) {
+			emptyNoteBook ();
 		} else {
 			fillStation(selected);
 		}
