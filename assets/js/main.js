@@ -1,6 +1,6 @@
 
 //-arrays & variables    decla 
-	let poly = [];        // decla array holding stations
+	//let poly = [];        // decla array holding stations
     let calcSt = [];    // decla array  stations calc
 	// ------ array -- data,  stations bonded//
 		let pop = document.getElementById('onDemand');
@@ -71,131 +71,10 @@
 		let error = false;
 // end decla
 
+//resetData();
 
-resetData();
-//test instance:
-poly = [
-	{
-		hautid: 1.62,
-		htA: 1.589,
-		htB: 1.562,
-		horD1: 325.4110,
-		horR1: 125.4065,
-		verD1: 105.2735,
-		verR1: 294.7275,
-		distoD1: 25.917,
-		distoR1: 25.917,
-		horD2: 48.2315,
-		horR2: 248.2285,
-		verD2: 100.0585,
-		verR2: 299.9415,
-		distoD2: 23.076,
-		distoR2: 23.075,
-	  },
-	  {
-		hautid: 1.562,
-		htA: 1.62,
-		htB: 1.574,
-		horD1: 6.0355,
-		horR1: 206.0315,
-		verD1: 99.946,
-		verR1: 300.057,
-		distoD1: 23.076,
-		distoR1: 23.076,
-		horD2: 312.2810,
-		horR2: 112.2765,
-		verD2: 93.8325,
-		verR2: 306.1685,
-		distoD2: 35.516,
-		distoR2: 35.516,
-	  },
-	  {
-		hautid: 1.574,
-		htA: 1.562,
-		htB: 1.399,
-		horD1: 357.178,
-		horR1: 157.1735,
-		verD1: 106.1685,
-		verR1: 293.833,
-		distoD1: 35.517,
-		distoR1: 35.516,
-		horD2: 199.2365,
-		horR2: 399.233,
-		verD2: 84.595,
-		verR2: 315.4055,
-		distoD2: 17.942,
-		distoR2: 17.942,
-	  },
-	  {
-		hautid: 1.399,
-		htA: 1.574,
-		htB: 1.695,
-		horD1: 220.2815,
-		horR1: 20.2795,
-		verD1: 115.4015,
-		verR1: 284.6005,
-		distoD1: 17.942,
-		distoR1: 17.942,
-		horD2: 122.0405,
-		horR2: 322.035,
-		verD2: 102.072,
-		verR2: 297.9285,
-		distoD2: 92.188,
-		distoR2: 92.187,
-	  },
-	  {
-		hautid: 1.695,
-		htA: 1.399,
-		htB: 1.557,
-		horD1: 191.2895,
-		horR1: 391.2855,
-		verD1: 97.93,
-		verR1: 302.073,
-		distoD1: 92.186,
-		distoR1: 92.186,
-		horD2: 56.5055,
-		horR2: 256.5025,
-		verD2: 110.8335,
-		verR2: 289.17,
-		distoD2: 30.637,
-		distoR2: 30.636,
-	  },
-	  {
-		hautid: 1.557,
-		htA: 1.695,
-		htB: 1.605,
-		horD1: 390.0765,
-		horR1: 190.0725,
-		verD1: 89.1695,
-		verR1: 310.832,
-		distoD1: 30.637,
-		distoR1: 30.636,
-		horD2: 306.6495,
-		horR2: 106.6455,
-		verD2: 102.2395,
-		verR2: 297.761,
-		distoD2: 47.005,
-		distoR2: 47.004,
-	  },
-	  {
-		hautid: 1.605,
-		htA: 1.557,
-		htB: 1.63,
-		horD1: 84.44,
-		horR1: 284.4355,
-		verD1: 97.755,
-		verR1: 302.246,
-		distoD1: 47.004,
-		distoR1: 47.003,
-		horD2: 329.7625,
-		horR2: 129.758,
-		verD2: 94.7345,
-		verR2: 305.268,
-		distoD2: 25.916,
-		distoR2: 25.915,
-	  },
-]
-// end test instance
+//poly = JSON.parse(localStorage.getItem('polyInstance'));
+
 displayStlist();
 function displayStlist() {
 	emptyContent("linkSt");
@@ -213,6 +92,23 @@ function displayStlist() {
 		lastA.classList.add(poly.length);
 		linkSt.appendChild(lastA);
 		displayNumber.innerHTML = "Station n°"+((poly.length) + 1)+ " ▾";
+		emptyNoteBook ();
+	}
+function is_touch_enabled() {
+		return ( 'ontouchstart' in window ) ||
+			   ( navigator.maxTouchPoints > 0 ) ||
+			   ( navigator.msMaxTouchPoints > 0 );
+	}
+if( is_touch_enabled() ) {
+		// Get the button, and when the user clicks on it, execute myFunction
+	document.getElementById("number").onclick = function() {myFunction()};
+
+/* myFunction toggles between adding and removing the show class, which is used to hide and show the dropdown content */
+	function myFunction() {
+  		let contentId = document.getElementById("linkSt");
+		contentId.style.display == "block" ? contentId.style.display = "none" : 
+		contentId.style.display = "block"; 
+}
 	}
 document.getElementById("reset").addEventListener("click", resetData);
 function resetData () {
@@ -896,6 +792,11 @@ function fillTable () {
 	    },
 	};
 	Plotly.newPlot('chart3d', data, layout);
+}
+document.getElementById("delete").addEventListener("click", deleteStation);
+function deleteStation() {
+	poly.splice(selected, 1);
+	displayStlist();
 }
 // display selected station
   $( "#linkSt" ).on( "click", "a", function(event) {
